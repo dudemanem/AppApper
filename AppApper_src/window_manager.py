@@ -3,7 +3,7 @@ from metadata import *
 
 root = tk.Tk()
 
-#DEFAULT ELEMENTS TO BE CREATES ALWAYS
+#DEFAULT ELEMENTS TO BE CREATED ALWAYS
 toolbar = tk.Label(root,width=100, height=10, text="Toolbar", bg="green")
 
 
