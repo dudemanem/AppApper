@@ -31,11 +31,16 @@ def create_loaded_shortcuts():
         sc = tk.Label(shortcut_container, width=test.width, height=test.heigth,bg="blue",text=test.name)
         sc.pack()
 
-        
+
+#placeholder function for loading short
+def load_shortcuts():
+    pass
+
+
 #creates window and assigns the base window to root
 def innitialize_window():
     global root,toolbar,shortcut_container,test
-    
+
     root.title(app_display_name + " - " + app_version)
     root.geometry(default_window_scale)
 
