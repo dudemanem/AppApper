@@ -14,7 +14,7 @@ toolbar = tk.Label(root,width=100, height=2, text="Toolbar", bg="green")
 shortcut_container = tk.Frame(width=100,height=100,bg="red")
 shortcut_bg = tk.Label(shortcut_container, width=100,height=100,bg="red")
 #test shortcut
-test = shortcut(20,10,"crap")
+test = shortcut(20,10,"TEST")
 
 
 #creates currently loaded shortcuts
@@ -22,7 +22,7 @@ def create_loaded_shortcuts():
     global test
     #this will be changed to for shortcuts in shortcuts_loaded, which will be an array to store the loaded shortcut class instances
     for i in range(1):
-        sc = tk.Label(shortcut_container, width=test.width, height=test.heigth,bg="blue")
+        sc = tk.Label(shortcut_container, width=test.width, height=test.heigth,bg="blue",text=test.name)
         sc.pack()
         
 #creates window and assigns the base window to root
