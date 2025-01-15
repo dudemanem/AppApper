@@ -1,6 +1,7 @@
 import tkinter as tk
 from shortcut import *
 from metadata import *
+from pathlib import Path
 
 #sets up root and grid system
 root = tk.Tk()
@@ -42,6 +43,7 @@ def innitialize_window():
     global root,toolbar,shortcut_container,test
 
     root.title(app_display_name + " - " + app_version)
+    root.iconbitmap('AppApper.ico')
     root.geometry(default_window_scale)
 
     #pack default elements
