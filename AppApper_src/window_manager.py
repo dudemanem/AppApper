@@ -2,7 +2,7 @@ import tkinter as tk
 from shortcut import *
 from metadata import *
 from pathlib import Path
-import saveload as save_manager
+import saveload as data_manager
 
 
 #sets up root and grid system
@@ -22,16 +22,12 @@ toolbar = tk.Label(toolbar_container,width=100, height=2, text="Toolbar", bg="gr
 shortcut_container = tk.Frame(width=100,height=100,bg="red")
 shortcut_bg = tk.Label(shortcut_container, width=100,height=100,bg="red")
 
-#test shortcut
-test = shortcut(20,10,"TEST")
 
 
 #creates currently loaded shortcuts - I don't yet have a system for loading shortcuts finished
 def create_loaded_shortcuts():
-    global test
-    #this will be changed to for shortcuts in shortcuts_loaded, which will be an array to store the loaded shortcut class instances
-    for i in range(1):
-        sc = tk.Label(shortcut_container, width=test.width, height=test.heigth,bg="blue",text=test.name)
+    for selected in data_manager.loaded_shortcuts:
+        sc = tk.Label(shortcut_container, width=selected.width, height=selected.heigth,bg="blue",text=selected.name)
         sc.pack()
 
 
@@ -56,7 +52,7 @@ def innitialize_window():
     shortcut_container.pack(expand=True,fill=tk.BOTH)
 
     #load data
-    save_manager.load_metadata()
+    data_manager.load_metadata()
     
 
     root.mainloop()

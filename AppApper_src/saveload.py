@@ -3,8 +3,10 @@ from shortcut import *
 from metadata import *
 import os
 import tkinter 
+from shortcut import *
 
-loaded_shortcuts = []
+
+loaded_shortcuts = [shortcut(1,"test1","app","app_path","null","null",40,20)]
 loaded_profile_path = ""
 loaded_profile_name = ""
 
