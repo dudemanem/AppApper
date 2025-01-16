@@ -2,6 +2,8 @@ import tkinter as tk
 from shortcut import *
 from metadata import *
 from pathlib import Path
+import saveload as save_manager
+
 
 #sets up root and grid system
 root = tk.Tk()
@@ -41,8 +43,8 @@ def load_shortcuts():
 #creates window and assigns the base window to root
 def innitialize_window():
     global root,toolbar,shortcut_container,test
-
     root.title(app_display_name + " - " + app_version)
+    #App Icon
     root.iconbitmap(r'AppApper_src\AppApper.ico')
     root.geometry(default_window_scale)
 
@@ -52,6 +54,9 @@ def innitialize_window():
     create_loaded_shortcuts()
     shortcut_bg.pack(expand=True,fill=tk.BOTH)
     shortcut_container.pack(expand=True,fill=tk.BOTH)
+
+    #load data
+    save_manager.load_metadata()
     
 
     root.mainloop()
