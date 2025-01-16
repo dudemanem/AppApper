@@ -43,7 +43,7 @@ def innitialize_window():
     global root,toolbar,shortcut_container,test
 
     root.title(app_display_name + " - " + app_version)
-    root.iconbitmap('AppApper.ico')
+    root.iconbitmap(r'AppApper_src\AppApper.ico')
     root.geometry(default_window_scale)
 
     #pack default elements
