@@ -5,7 +5,7 @@ from pathlib import Path
 import saveload as data_manager
 
 
-#sets up root and grid system
+#sets up root 
 root = tk.Tk()
 
 
@@ -14,20 +14,20 @@ root = tk.Tk()
 #|
 #\/
 
+
 #toolbar - currently a placeholder for a toolbar
-toolbar_container = tk.Frame(root, width=100,height=2)
-toolbar = tk.Label(toolbar_container,width=10, height=2, text="Toolbar", bg="green")
+toolbar_container = tk.Frame(root, width=400,height=20,bg="green")
+create_button = tk.Button(toolbar_container, width=10, height=2, text="Click Me!",pady=0)
 
 #shortcut box
-shortcut_container = tk.Frame(width=100,height=100,bg="red")
-shortcut_bg = tk.Label(shortcut_container, width=20,height=20,bg="red").pack(side="left")
+shortcut_container = tk.Frame(root, width=300,height=300,bg="red")
 
 
 #creates currently loaded shortcuts - I don't yet have a system for loading shortcuts finished
 def create_loaded_shortcuts():
     row = 1
     for selected in data_manager.loaded_shortcuts:
-        sc = tk.Label(shortcut_bg, width=selected.width, height=selected.heigth,bg="blue",text=selected.name).pack()
+        sc = tk.Label(shortcut_container, width=selected.width, height=selected.heigth,bg="orange",text=selected.name).pack(side="left",fill="none",pady=10,padx=10)
         row += 1
         
 
@@ -39,16 +39,16 @@ def load_shortcuts():
 
 #creates window and assigns the base window to root
 def innitialize_window():
-    global root,toolbar
+    global root,create_button
     root.title(app_display_name + " - " + app_version)
     #App Icon
     root.iconbitmap(r'AppApper_src\AppApper.ico')
     root.geometry(default_window_scale)
 
     #pack default elements
-    toolbar_container.grid(column=0,row=0)
-    toolbar.pack(side="left")
-    shortcut_container.grid(column=0,row=1)
+    toolbar_container.pack(side="top",fill="x",padx=0,pady=0)
+    shortcut_container.pack(side="top",fill="both",pady=10)
+    create_button.pack(side="left",fill="none",pady=10)
     create_loaded_shortcuts()
     
 
