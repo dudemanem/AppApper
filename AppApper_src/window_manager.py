@@ -37,7 +37,7 @@ shortcut_container.grid(row=1, column=0, sticky="nsew",columnspan=10,pady=0,rows
 
 
 create_button = tk.Button(toolbar_container, text="Create Shortcut")
-load_profile = tk.Button(toolbar_container, text="Load Profile")
+load_profile = tk.Button(toolbar_container, text="Load Profile",command=lambda:data_manager.load_profile())
 profile_name = tk.Text(toolbar_container, height=1,width=15,)
 save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda : data_manager.save_profile(profile_name))
 
