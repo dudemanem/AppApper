@@ -6,7 +6,7 @@ import tkinter
 from shortcut import *
 
 
-loaded_shortcuts = [shortcut(1,"test1","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1)]
+loaded_shortcuts = [shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1)]
 loaded_profile_path = ""
 loaded_profile_name = ""
 
