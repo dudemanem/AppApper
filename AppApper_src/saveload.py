@@ -26,8 +26,8 @@ def read_profile_data(dir):
     file = open(dir,"r")
     data = file.read()
 
-    print(data)
-    
+    tkinter.messagebox.showinfo("loaded profile data (this is a placeholder)", data)
+
 
 #loads shortcut profile
 def load_profile():
