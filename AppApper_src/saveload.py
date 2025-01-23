@@ -17,7 +17,7 @@ def create_data_path_directory():
 
 #creates save file
 def create_data_save_file():
-    with open(save_file_path, "w") as f:
+    with open(profile_dir, "w") as f:
         f.write("Test")
     tkinter.messagebox.showinfo("Save File Created!", "The save file at " + save_file_path + " has been created")
 
@@ -28,11 +28,15 @@ def load_profile():
 #saves data of current profile
 def save_profile(text_field):
     name = text_field.get("1.0",'end-1c')
+    if not os.path.exists(profile_dir):
+        tkinter.messagebox.showerror("Missing Profile Directory", "Profile directory at " + profile_dir + " is missing. it has now been created!")
+        os.mkdir(profile_dir)
     if name == "":
         tkinter.messagebox.showerror("No Profile Name Provided", "Enter a name for the profile in the text box before you save it!")
         return
     with open(data_dir + "\\" + name + ".txt", "w") as f:
         f.write("Profile " + name + " Saved")
+    tkinter.messagebox.showinfo("Profile Created", 'Profile "' + name + '" has been created!')
 
 #loads app settings (such as default profile path) from app data
 def load_metadata():
