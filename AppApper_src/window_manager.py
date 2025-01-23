@@ -20,12 +20,12 @@ root.geometry(default_window_scale)
 
 #toolbar - currently a placeholder for a toolbar
 toolbar_container = tk.Frame(root,bg="green")
-toolbar_container.grid(row=0, column=0, sticky="ew",columnspan=10,pady=0)
+toolbar_container.grid(row=0, column=0, sticky="nsew",columnspan=10,pady=0)
 for i in range(30):
     toolbar_container.grid_columnconfigure(i, weight=1)
 
-shortcut_container = tk.Frame(root,bg="green")
-shortcut_container.grid(row=1, column=0, sticky="ew",columnspan=10,pady=0)
+shortcut_container = tk.Frame(root,bg="orange")
+shortcut_container.grid(row=1, column=0, sticky="nsew",columnspan=10,pady=0,rowspan=100)
     
 
 
@@ -35,7 +35,7 @@ extra_button = tk.Button(toolbar_container, text="Testing Button :3")
 def configure_grid():
     for i in range(10):
         root.grid_columnconfigure(i, weight=1)  
-    for i in range(30):
+    for i in range(100):
         root.grid_rowconfigure(i, weight=1)
         
 #creates currently loaded shortcuts - I don't yet have a system for loading shortcuts finished
@@ -54,8 +54,8 @@ def innitialize_window():
 
     configure_grid()
     #add default elements
-    create_button.grid(row=0,column=0,sticky="ew",pady=1)
-    extra_button.grid(row=0,column=1,sticky="ew",pady=1)
+    create_button.grid(row=0,column=0,sticky="ew",pady=2,padx=2)
+    extra_button.grid(row=0,column=1,sticky="ew",pady=2,padx=2)
     create_loaded_shortcuts()
 
     #load data
