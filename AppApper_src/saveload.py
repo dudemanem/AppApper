@@ -6,7 +6,7 @@ import tkinter
 from shortcut import *
 
 
-loaded_shortcuts = [shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test1","app","app_path","null","null",80,50),shortcut(1,"test2","app","app_path","null","null",2,1),shortcut(1,"test2","app","app_path","null","null",2,1)]
+loaded_shortcuts = [shortcut(1,"test1","app",r"C:\Program Files (x86)\Steam\steamapps\common\Clone Drone in the Danger Zone\Clone Drone in the Danger Zone.exe","null","null",80,50)]
 loaded_profile_path = ""
 loaded_profile_name = ""
 
@@ -26,8 +26,13 @@ def load_profile():
     pass
 
 #saves data of current profile
-def save_profile():
-    pass
+def save_profile(text_field):
+    name = text_field.get("1.0",'end-1c')
+    if name == "":
+        tkinter.messagebox.showerror("No Profile Name Provided", "Enter a name for the profile in the text box before you save it!")
+        return
+    with open(data_dir + "\\" + name + ".txt", "w") as f:
+        f.write("Profile " + name + " Saved")
 
 #loads app settings (such as default profile path) from app data
 def load_metadata():
