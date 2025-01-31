@@ -7,7 +7,7 @@ from shortcut import *
 from tkinter import filedialog as fd
 
 
-loaded_shortcuts = [shortcut(1,"test1","app",r"C:\Program Files (x86)\Steam\steamapps\common\Clone Drone in the Danger Zone\Clone Drone in the Danger Zone.exe","null","null",80,50)]
+loaded_shortcuts = []
 loaded_profile_path = ""
 loaded_profile_name = ""
 
