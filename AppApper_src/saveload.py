@@ -11,6 +11,8 @@ loaded_shortcuts = [shortcut(1,"test1","app",r"C:\Program Files (x86)\Steam\stea
 loaded_profile_path = ""
 loaded_profile_name = ""
 
+#--------------------------------------------------------------------------------------------------------- path creation
+
 #creates save directory
 def create_data_path_directory():
     os.mkdir(data_dir)
@@ -21,6 +23,8 @@ def create_data_save_file():
     with open(save_file_path, "w") as f:
         f.write("Test")
     tkinter.messagebox.showinfo("Save File Created!", "The save file at " + save_file_path + " has been created")
+
+#--------------------------------------------------------------------------------------------------------- loading
 
 #reads selected profile from dir
 def read_profile_data(dir):
@@ -76,6 +80,7 @@ def load_profile():
     print(file_path)
     read_profile_data(file_path)
 
+#--------------------------------------------------------------------------------------------------------- saving
 
 #compiles current data in an encoded profile save to be written to a text file
 def compile_profile_data(name):
@@ -104,8 +109,11 @@ def save_profile(text_field):
         f.write(contents)
     tkinter.messagebox.showinfo("Profile Created", 'Profile "' + name + '" has been created!')
 
-#loads app settings (such as default profile path) from app data
+#--------------------------------------------------------------------------------------------------------- startup of app loading
+
+#loads app settings (such as default profile path) from app data. This is just a placeholder, these settings don't exist yet
 def load_metadata():
+
     #display message and create path if doesn't exist
     if not os.path.isdir(data_dir):
         tkinter.messagebox.showerror("Error", "The application data path at " + data_dir + " does not exist. It will now be created.")

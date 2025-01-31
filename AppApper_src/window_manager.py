@@ -76,7 +76,8 @@ def create_loaded_shortcuts():
         if c == 6:
             r += 1
             c = 1
-        
+
+#loads profile and then tells program to reload shortcut widgets
 def load_profile_process():
     data_manager.load_profile()
     create_loaded_shortcuts()
