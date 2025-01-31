@@ -37,11 +37,12 @@ shortcut_container.grid(row=1, column=0, sticky="nsew",columnspan=10,pady=0,rows
 
 
 create_button = tk.Button(toolbar_container, text="Create Shortcut")
-load_profile = tk.Button(toolbar_container, text="Load Profile",command=lambda:data_manager.load_profile())
+load_profile = tk.Button(toolbar_container, text="Load Profile",command=lambda:load_profile_process())
 profile_name = tk.Text(toolbar_container, height=1,width=15,)
 save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda : data_manager.save_profile(profile_name))
 
 #--------------------------------------------------------------------------------------------------------- Functions
+
 
 def open_app(path):
     subprocess.Popen(path)
@@ -53,8 +54,12 @@ def configure_grid():
     for i in range(100):
         root.grid_rowconfigure(i, weight=1)
         
-#creates currently loaded shortcuts - I don't yet have a system for loading shortcuts finished
+#creates currently loaded shortcuts
 def create_loaded_shortcuts():
+
+    for child in shortcut_container.winfo_children():
+        child.destroy()
+
     c = 1
     r = 1
     for selected in data_manager.loaded_shortcuts:
@@ -62,7 +67,7 @@ def create_loaded_shortcuts():
             tkinter.messagebox.showerror("No Good Amount Of Space :<","The program ran out of space, some shortcuts are not shown!")
             break
         sc = tk.Frame(shortcut_container, bg="red",width=100,height=100)
-        sc_button = tk.Button(sc,text = "Launch",command=lambda : open_app(selected.app_path))
+        sc_button = tk.Button(sc,text = "Launch" + selected.name,command=lambda : open_app(selected.app_path))
         sc_color = tk.Frame(sc, bg="red", width=200, height=150)
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
         sc_button.pack(expand=True,fill="both",)
@@ -72,7 +77,9 @@ def create_loaded_shortcuts():
             r += 1
             c = 1
         
-
+def load_profile_process():
+    data_manager.load_profile()
+    create_loaded_shortcuts()
 
 #creates window and assigns the base window to root
 def innitialize_window():
