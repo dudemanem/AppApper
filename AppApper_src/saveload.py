@@ -30,6 +30,14 @@ def create_data_save_file():
 def read_profile_data(dir):
     global loaded_shortcuts
 
+    if dir == "":
+        tkinter.messagebox.showerror("No Path Given", "There was no path given to a profile!")
+        return
+
+    if not os.path.isfile(dir):
+        tkinter.messagebox.showerror("Not a File", "The given directory is not a file!")
+        return
+
     loaded_shortcuts = []
 
     file = open(dir,"r")
@@ -52,7 +60,6 @@ def read_profile_data(dir):
         tkinter.messagebox.showinfo(str(shortcut_end[current_index]), "End")
         sc_text = data[shortcut_start[current_index]+1:shortcut_end[current_index]]
         current_index += 1
-        tkinter.messagebox.showinfo("Sc", sc_text)
         #location of commas in the bracket
         sc_commas = [i for i, c in enumerate(sc_text) if c == ","]
         id = sc_text[0:sc_commas[0]]
