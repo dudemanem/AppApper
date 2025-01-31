@@ -57,7 +57,6 @@ def read_profile_data(dir):
     current_index = 0
     for i in range(len(shortcut_start)):
 
-        tkinter.messagebox.showinfo(str(shortcut_end[current_index]), "End")
         sc_text = data[shortcut_start[current_index]+1:shortcut_end[current_index]]
         current_index += 1
         #location of commas in the bracket
