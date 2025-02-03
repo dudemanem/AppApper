@@ -51,7 +51,8 @@ def open_app(path):
         return
     subprocess.run([path])
     
-
+def create_new_shortcut():
+    tkinter.messagebox.showinfo("Placeholder", "This is a placeholder for shortcut creation!")
 
 def configure_grid():
     for i in range(10):
@@ -72,7 +73,7 @@ def create_loaded_shortcuts():
             tkinter.messagebox.showerror("No Good Amount Of Space :<","The program ran out of space, some shortcuts are not shown!")
             break
         sc = tk.Frame(shortcut_container, bg="red",width=100,height=100)
-        sc_button = tk.Button(sc,text = "Launch" + selected.name,command=lambda : open_app(selected.app_path))
+        sc_button = tk.Button(sc,text = "Launch: " + selected.name,command=lambda : open_app(selected.app_path))
         sc_color = tk.Frame(sc, bg="red", width=200, height=150)
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
         sc_button.pack(expand=True,fill="both",)

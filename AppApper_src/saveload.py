@@ -40,18 +40,21 @@ def read_profile_data(dir):
 
     loaded_shortcuts = []
 
-    file = open(dir,"r")
+    try:
+        file = open(dir,"r")
+    except:
+        tkinter.messagebox.showerror("Error Opening Profile!", "The app was unable to open the profile file!")
     data = file.read()
 
     name_index = data.index("@") + 1
 
     commas = [i for i, c in enumerate(data) if c == ","]
 
-    #location of start and end of brackets in file. all shortcuts are contained in brackets
+    #location of start and end of brackets in file. all shortcuts are contained in brackets, so this can be used to isolate the shortcut text.
     shortcut_start = [i for i, c in enumerate(data) if c == "["]
     shortcut_end = [i for i, c in enumerate(data) if c == "]"]
 
-    #loaded data variables
+    #loaded name
     profile_name = data[name_index:commas[0]]
     
     current_index = 0
@@ -59,19 +62,20 @@ def read_profile_data(dir):
 
         sc_text = data[shortcut_start[current_index]+1:shortcut_end[current_index]]
         current_index += 1
-        #location of commas in the bracket
+        #location of commas in the specific isolated shortcut text
         sc_commas = [i for i, c in enumerate(sc_text) if c == ","]
+        #loaded values for the shortcut class
         id = sc_text[0:sc_commas[0]]
         type = sc_text[sc_commas[0]+1:sc_commas[1]]
         name = sc_text[sc_commas[1]+1:sc_commas[2]]
         app_path = sc_text[sc_commas[2]+1:sc_commas[3]]
         print(app_path)
-
+        #fpath and ipath are null right now, they will be implemented later
         sc = shortcut(id,name,type,app_path,"null","null",80,50)
         loaded_shortcuts.append(sc)
 
 
-#loads shortcut profile
+#opens prompt and passes profile file data to the read_profile_data function
 def load_profile():
 
     filetypes = (
