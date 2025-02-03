@@ -64,7 +64,8 @@ def read_profile_data(dir):
         id = sc_text[0:sc_commas[0]]
         type = sc_text[sc_commas[0]+1:sc_commas[1]]
         name = sc_text[sc_commas[1]+1:sc_commas[2]]
-        app_path = repr(sc_text[sc_commas[2]+1:sc_commas[3]])
+        app_path = sc_text[sc_commas[2]+1:sc_commas[3]]
+        print(app_path)
 
         sc = shortcut(id,name,type,app_path,"null","null",80,50)
         loaded_shortcuts.append(sc)

@@ -6,6 +6,7 @@ import saveload as data_manager
 import tkinter.messagebox
 import os as os
 import subprocess
+from AppOpener import open
 
 
 
@@ -45,7 +46,11 @@ save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda
 
 
 def open_app(path):
-    subprocess.Popen(path)
+    if not os.path.exists(path):
+        tkinter.messagebox.showerror("System Cannot Find Path!","Please make sure the path is valid!")
+        return
+    subprocess.run([path])
+    
 
 
 def configure_grid():
