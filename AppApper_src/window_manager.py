@@ -6,7 +6,7 @@ import saveload as data_manager
 import tkinter.messagebox
 import os as os
 import subprocess
-from AppOpener import open
+
 
 
 
