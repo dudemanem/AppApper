@@ -79,12 +79,13 @@ def create_new_shortcut():
     
     id = 0
     if len(data_manager.loaded_shortcuts) > 0:
-        id = data_manager.loaded_shortcuts[len(data_manager.loaded_shortcuts)]+1
+        id = data_manager.loaded_shortcuts[len(data_manager.loaded_shortcuts)-1].id+1
     else:
         id = 1
     sc = shortcut(id,name,"app",path,"null","null",80,50)
     data_manager.loaded_shortcuts.append(sc)
     create_loaded_shortcuts()
+    print(data_manager.loaded_shortcuts)
 
 
 def configure_grid():
