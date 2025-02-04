@@ -16,7 +16,7 @@ import subprocess
 root = tk.Tk()
 root.title(app_display_name + " - " + app_version)
 #App Icon
-root.iconbitmap(r'AppApper_src\AppApper.ico')
+root.iconbitmap(r'AppApper.ico')
 root.geometry(default_window_scale)
 root.resizable(0,0)
 
