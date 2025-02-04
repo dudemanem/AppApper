@@ -75,7 +75,7 @@ def open_app(path):
         tkinter.messagebox.showerror("System Cannot Find Path!","Please make sure the path is valid!")
         return
     
-    subprocess.run([current_path.get()])
+    subprocess.run([current_path.get()],timeout=1)
     
 def create_new_shortcut():
     name = tkinter.simpledialog.askstring("Enter Name", "Enter a name for this shortcut.")
