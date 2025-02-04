@@ -21,6 +21,8 @@ root.title(app_display_name + " - " + app_version)
 root.geometry(default_window_scale)
 root.resizable(0,0)
 
+current_path = tkinter.StringVar()
+
 
 #These are the default widgets of the app
 #|
@@ -57,10 +59,10 @@ def create_loaded_shortcuts():
             tkinter.messagebox.showerror("No Good Amount Of Space :<","The program ran out of space, some shortcuts are not shown!")
             break
         sc = tk.Frame(shortcut_container, bg="red",width=100,height=100)
-        sc_button = tk.Button(sc,text = "Launch: " + selected.name,command=lambda : open_app(selected.app_path))
+        sc_button = tk.Button(sc,text = "Launch: " + selected.name,command=lambda p = selected.app_path: open_app(p))
         sc_color = tk.Frame(sc, bg="red", width=200, height=150)
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
-        sc_button.pack(expand=True,fill="both",)
+        sc_button.pack(expand=True,fill="both")
         sc_color.pack(expand=True,fill="both")
         c += 1
         if c == 6:
@@ -68,10 +70,12 @@ def create_loaded_shortcuts():
             c = 1
 
 def open_app(path):
-    if not os.path.exists(path):
+    current_path.set(path)
+    if not os.path.exists(current_path.get()):
         tkinter.messagebox.showerror("System Cannot Find Path!","Please make sure the path is valid!")
         return
-    subprocess.run([path])
+    
+    subprocess.run([current_path.get()])
     
 def create_new_shortcut():
     name = tkinter.simpledialog.askstring("Enter Name", "Enter a name for this shortcut.")
