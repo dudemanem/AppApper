@@ -6,6 +6,7 @@ import saveload as data_manager
 import tkinter.messagebox
 import os as os
 import subprocess
+import tkinter.simpledialog 
 
 
 
@@ -37,29 +38,12 @@ shortcut_container.grid(row=1, column=0, sticky="nsew",columnspan=10,pady=0,rows
     
 
 
-create_button = tk.Button(toolbar_container, text="Create Shortcut")
+create_button = tk.Button(toolbar_container, text="Create Shortcut",command=lambda:create_new_shortcut())
 load_profile = tk.Button(toolbar_container, text="Load Profile",command=lambda:load_profile_process())
 profile_name = tk.Text(toolbar_container, height=1,width=15,)
 save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda : data_manager.save_profile(profile_name))
 
 #--------------------------------------------------------------------------------------------------------- Functions
-
-
-def open_app(path):
-    if not os.path.exists(path):
-        tkinter.messagebox.showerror("System Cannot Find Path!","Please make sure the path is valid!")
-        return
-    subprocess.run([path])
-    
-def create_new_shortcut():
-    tkinter.messagebox.showinfo("Placeholder", "This is a placeholder for shortcut creation!")
-
-def configure_grid():
-    for i in range(10):
-        root.grid_columnconfigure(i, weight=1)  
-    for i in range(100):
-        root.grid_rowconfigure(i, weight=1)
-        
 #creates currently loaded shortcuts
 def create_loaded_shortcuts():
 
@@ -82,6 +66,34 @@ def create_loaded_shortcuts():
         if c == 6:
             r += 1
             c = 1
+
+def open_app(path):
+    if not os.path.exists(path):
+        tkinter.messagebox.showerror("System Cannot Find Path!","Please make sure the path is valid!")
+        return
+    subprocess.run([path])
+    
+def create_new_shortcut():
+    name = tkinter.simpledialog.askstring("Enter Name", "Enter a name for this shortcut.")
+    path = tkinter.simpledialog.askstring("Enter Path", "Please enter the path for the application you want to link with the shortcut. Do not type quotes around the path, just type the path.")
+    
+    id = 0
+    if len(data_manager.loaded_shortcuts) > 0:
+        id = data_manager.loaded_shortcuts[len(data_manager.loaded_shortcuts)]+1
+    else:
+        id = 1
+    sc = shortcut(id,name,"app",path,"null","null",80,50)
+    data_manager.loaded_shortcuts.append(sc)
+    create_loaded_shortcuts()
+
+
+def configure_grid():
+    for i in range(10):
+        root.grid_columnconfigure(i, weight=1)  
+    for i in range(100):
+        root.grid_rowconfigure(i, weight=1)
+        
+
 
 #loads profile and then tells program to reload shortcut widgets
 def load_profile_process():

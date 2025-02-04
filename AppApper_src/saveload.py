@@ -65,7 +65,7 @@ def read_profile_data(dir):
         #location of commas in the specific isolated shortcut text
         sc_commas = [i for i, c in enumerate(sc_text) if c == ","]
         #loaded values for the shortcut class
-        id = sc_text[0:sc_commas[0]]
+        id = int(sc_text[0:sc_commas[0]])
         type = sc_text[sc_commas[0]+1:sc_commas[1]]
         name = sc_text[sc_commas[1]+1:sc_commas[2]]
         app_path = sc_text[sc_commas[2]+1:sc_commas[3]]
