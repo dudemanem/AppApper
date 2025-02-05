@@ -36,7 +36,9 @@ for i in range(30):
     toolbar_container.grid_columnconfigure(i, weight=1)
 
 shortcut_container = tk.Frame(root,bg="silver")
-shortcut_container.grid(row=1, column=0, sticky="nsew",columnspan=10,pady=0,rowspan=100,)
+
+
+shortcut_limit_text = tk.Label(root,width=10,height=10,text="Profiles created: 0/15")
     
 
 
@@ -82,6 +84,7 @@ def create_loaded_shortcuts():
         if c == 6:
             r += 1
             c = 1
+    shortcut_limit_text.config(text="Shortcuts created: " + str(len(data_manager.loaded_shortcuts)) + "/15")
 
 def open_app(path):
     current_path.set(path)
@@ -137,6 +140,8 @@ def innitialize_window():
     profile_name.grid(row=0,column=1,sticky="ew",padx=2,pady=2)
     save_profile.grid(row=0,column=2,sticky="ew",pady=2,padx=2)
     load_profile.grid(row=0,column=3,sticky="ew",pady=2,padx=2)
+    shortcut_container.grid(row=1, column=0, sticky="nsew",columnspan=10,pady=0,rowspan=100,)
+    shortcut_limit_text.grid(row=1,column=9,sticky="nsew",columnspan=1)
     create_loaded_shortcuts()
 
     #load default save data
