@@ -46,6 +46,15 @@ profile_name = tk.Text(toolbar_container, height=1,width=15,)
 save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda : data_manager.save_profile(profile_name))
 
 #--------------------------------------------------------------------------------------------------------- Functions
+
+#This funciton runs through all the current shortcuts and makes all of their ids run in linear order.
+#This is important because if a shortcut is deleted with the id of say, 4, then the shortcut that had the id of 5 should now be 4, and so on
+def reset_shortcut_ids():
+    for i in range(len(data_manager.loaded_shortcuts)):
+        data_manager.loaded_shortcuts[i].id = (i + 1)
+
+
+
 #creates currently loaded shortcuts
 def create_loaded_shortcuts():
 
@@ -54,6 +63,8 @@ def create_loaded_shortcuts():
 
     c = 1
     r = 1
+    #this index variable will be passed to the delete_shortcut function to let it know which shortcut needs to be deleted
+    index = 0
     for selected in data_manager.loaded_shortcuts:
         if r > 3:
             tkinter.messagebox.showerror("No Good Amount Of Space :<","The program ran out of space, some shortcuts are not shown!")
@@ -61,10 +72,13 @@ def create_loaded_shortcuts():
         sc = tk.Frame(shortcut_container, bg="red",width=100,height=100)
         sc_button = tk.Button(sc,text = "Launch: " + selected.name,command=lambda p = selected.app_path: open_app(p))
         sc_color = tk.Frame(sc, bg="red", width=200, height=150)
+        delete_button = tk.Button(sc,text = "X", command=lambda i = index: delete_shortcut(i))
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
         sc_button.pack(expand=True,fill="both")
         sc_color.pack(expand=True,fill="both")
+        delete_button.pack(expand=True,fill="both")
         c += 1
+        index += 1
         if c == 6:
             r += 1
             c = 1
@@ -76,6 +90,13 @@ def open_app(path):
         return
     
     subprocess.run([current_path.get()],timeout=2)
+
+#index is obtained from lambda funcion in delete button
+#this function removes the shortcut from the loaded list and calls the reset for the shortcut ids
+def delete_shortcut(index):
+    data_manager.loaded_shortcuts.pop(index)
+    reset_shortcut_ids()
+    create_loaded_shortcuts()
     
 def create_new_shortcut():
     name = tkinter.simpledialog.askstring("Enter Name", "Enter a name for this shortcut.")
