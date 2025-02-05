@@ -45,7 +45,7 @@ shortcut_limit_text = tk.Label(root,width=10,height=10,text="Profiles created: 0
 create_button = tk.Button(toolbar_container, text="Create Shortcut",command=lambda:create_new_shortcut())
 load_profile = tk.Button(toolbar_container, text="Load Profile",command=lambda:load_profile_process())
 profile_name = tk.Text(toolbar_container, height=1,width=15,)
-save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda : data_manager.save_profile(profile_name))
+save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda : data_manager.save_profile(profile_name.get("1.0",'1.end')))
 
 #--------------------------------------------------------------------------------------------------------- Functions
 

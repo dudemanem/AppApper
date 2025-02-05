@@ -106,9 +106,9 @@ def compile_profile_data(name):
 
 #saves data of current profile
 def save_profile(text_field):
-    name = text_field.get("1.0",'end-1c')
+    name = text_field
     contents = compile_profile_data(name)
-
+    print(name)
     if not os.path.exists(profile_dir):
         tkinter.messagebox.showerror("Missing Profile Directory", "Profile directory at " + profile_dir + " is missing. it has now been created!")
         os.makedirs(profile_dir)
