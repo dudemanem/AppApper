@@ -44,6 +44,7 @@ def read_profile_data(dir):
         file = open(dir,"r")
     except:
         tkinter.messagebox.showerror("Error Opening Profile!", "The app was unable to open the profile file!")
+        return
     data = file.read()
 
     name_index = data.index("@") + 1

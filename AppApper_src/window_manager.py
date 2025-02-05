@@ -17,7 +17,7 @@ import tkinter.simpledialog
 root = tk.Tk()
 root.title(app_display_name + " - " + app_version)
 #App Icon
-#root.iconbitmap(r'AppApper.ico')
+#root.iconbitmap(r'AppApper.ico') # - old code, ignore this shit
 root.geometry(default_window_scale)
 root.resizable(0,0)
 
@@ -75,7 +75,7 @@ def open_app(path):
         tkinter.messagebox.showerror("System Cannot Find Path!","Please make sure the path is valid!")
         return
     
-    subprocess.run([current_path.get()],timeout=1)
+    subprocess.run([current_path.get()],timeout=2)
     
 def create_new_shortcut():
     name = tkinter.simpledialog.askstring("Enter Name", "Enter a name for this shortcut.")
