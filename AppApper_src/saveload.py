@@ -124,7 +124,7 @@ def save_profile(text_field):
 #--------------------------------------------------------------------------------------------------------- startup of app loading
 
 #loads app settings (such as default profile path) from app data. This is just a placeholder, these settings don't exist yet
-def load_metadata():
+def load_save_data():
 
     #display message and create path if doesn't exist
     if not os.path.isdir(data_dir):

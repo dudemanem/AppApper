@@ -19,7 +19,7 @@ root.title(app_display_name + " - " + app_version)
 #App Icon
 #root.iconbitmap(r'AppApper.ico') # - old code, ignore this shit
 root.geometry(default_window_scale)
-root.resizable(0,0)
+root.resizable(1,1)
 
 current_path = tkinter.StringVar()
 
@@ -107,8 +107,10 @@ def create_new_shortcut():
         id = data_manager.loaded_shortcuts[len(data_manager.loaded_shortcuts)-1].id+1
     else:
         id = 1
+
     sc = shortcut(id,name,"app",path,"null","null",80,50)
     data_manager.loaded_shortcuts.append(sc)
+
     create_loaded_shortcuts()
     print(data_manager.loaded_shortcuts)
 
@@ -119,7 +121,6 @@ def configure_grid():
     for i in range(100):
         root.grid_rowconfigure(i, weight=1)
         
-
 
 #loads profile and then tells program to reload shortcut widgets
 def load_profile_process():
@@ -138,8 +139,8 @@ def innitialize_window():
     load_profile.grid(row=0,column=3,sticky="ew",pady=2,padx=2)
     create_loaded_shortcuts()
 
-    #load data
-    data_manager.load_metadata()
+    #load default save data
+    data_manager.load_save_data()
     
 
     root.mainloop()
