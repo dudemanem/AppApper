@@ -128,7 +128,7 @@ def save_profile(text_field):
         f.write(contents)
     tkinter.messagebox.showinfo("Profile Created", 'Profile "' + name + '" has been created!')
 
-#--------------------------------------------------------------------------------------------------------- startup of app loading
+#--------------------------------------------------------------------------------------------------------- loading default save files and confirming that needed directories exist
 
 #loads app settings (such as default profile path) from app data. This is just a placeholder, these settings don't exist yet
 def load_save_data():

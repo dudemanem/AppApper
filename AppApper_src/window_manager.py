@@ -53,9 +53,10 @@ save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda
 
 #--------------------------------------------------------------------------------------------------------- Functions
 
-
+########################################################
+#Checks if given path is an executable file for windows#
+########################################################
 def is_executable_file(path):
-    # Check if the path exists and is a file
     if os.path.isfile(path):
         # Check if the file has execute permissions
         st = os.stat(path)
@@ -72,7 +73,7 @@ def reset_shortcut_ids():
 
 
 
-#creates currently loaded shortcuts
+#creates currently loaded shortcuts and displays them on the shortcut_container frame
 def create_loaded_shortcuts():
 
     for child in shortcut_container.winfo_children():
@@ -101,6 +102,9 @@ def create_loaded_shortcuts():
             c = 1
     shortcut_limit_text.config(text="Shortcuts created: " + str(len(data_manager.loaded_shortcuts)) + "/15")
 
+############################################################################
+#This opens the app or the file and an associated app that are passed to it#
+############################################################################
 def open_app(path,type,fpath):
     current_path.set(path)
     current_type.set(type)
@@ -114,7 +118,7 @@ def open_app(path,type,fpath):
         if is_executable_file(current_path.get()):
             try:
                 # Attempt to run a command with a timeout of 5 seconds
-                result = subprocess.run([current_path.get()],timeout=2, check=True)
+                result = subprocess.Popen([current_path.get()])
                 print("Command succeeded:", result)
             except subprocess.TimeoutExpired:
                 print("The command timed out.")
@@ -126,7 +130,7 @@ def open_app(path,type,fpath):
         if is_executable_file(current_fpath.get()):
             try:
                 # Attempt to run a command with a timeout of 5 seconds
-                result = subprocess.run([current_fpath.get(), current_path.get()],timeout=5, check=True)
+                result = subprocess.Popen([current_fpath.get(), current_path.get()])
                 print("Command succeeded:", result)
             except subprocess.TimeoutExpired:
                 print("The command timed out.")
@@ -194,7 +198,8 @@ def load_profile_process():
     data_manager.load_profile()
     create_loaded_shortcuts()
 
-#creates window and assigns the base window to root
+
+#creates window and assigns the base window to root. ALso adds default widgets to grid
 def innitialize_window():
     global root,create_button
 
