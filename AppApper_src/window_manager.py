@@ -7,6 +7,8 @@ import tkinter.messagebox
 import os as os
 import subprocess
 import tkinter.simpledialog 
+from tkinter import filedialog as fd
+import stat
 
 
 
@@ -48,6 +50,17 @@ profile_name = tk.Text(toolbar_container, height=1,width=15,)
 save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda : data_manager.save_profile(profile_name.get("1.0",'1.end')))
 
 #--------------------------------------------------------------------------------------------------------- Functions
+
+
+def is_executable_file(path):
+    # Check if the path exists and is a file
+    if os.path.isfile(path):
+        # Check if the file has execute permissions
+        st = os.stat(path)
+        return bool(st.st_mode & stat.S_IEXEC)
+    return False
+
+
 
 #This funciton runs through all the current shortcuts and makes all of their ids run in linear order.
 #This is important because if a shortcut is deleted with the id of say, 4, then the shortcut that had the id of 5 should now be 4, and so on
@@ -91,8 +104,12 @@ def open_app(path):
     if not os.path.exists(current_path.get()):
         tkinter.messagebox.showerror("System Cannot Find Path!","Please make sure the path is valid!")
         return
-    
-    subprocess.run([current_path.get()],timeout=2)
+
+    if is_executable_file(current_path.get()):
+        subprocess.run([current_path.get()],timeout=2)
+    else:
+        tkinter.messagebox.showerror("Not executable!", "That path does not lead to an executable file!")
+
 
 #index is obtained from lambda funcion in delete button
 #this function removes the shortcut from the loaded list and calls the reset for the shortcut ids
@@ -103,7 +120,17 @@ def delete_shortcut(index):
     
 def create_new_shortcut():
     name = tkinter.simpledialog.askstring("Enter Name", "Enter a name for this shortcut.")
-    path = tkinter.simpledialog.askstring("Enter Path", "Please enter the path for the application you want to link with the shortcut. Do not type quotes around the path, just type the path.")
+    filetypes = (
+        ('All files', '*.*'),
+        ('text files', '*.txt')
+    )
+
+    path = fd.askopenfilename(
+        title="Select an AppApper Profile",
+        initialdir=profile_dir,
+        filetypes=filetypes
+    )
+    print(path)
     
     id = 0
     if len(data_manager.loaded_shortcuts) > 0:
