@@ -24,6 +24,8 @@ root.geometry(default_window_scale)
 root.resizable(1,1)
 
 current_path = tkinter.StringVar()
+current_type = tkinter.StringVar()
+current_fpath = tkinter.StringVar()
 
 
 #These are the default widgets of the app
@@ -85,7 +87,7 @@ def create_loaded_shortcuts():
             tkinter.messagebox.showerror("No Good Amount Of Space :<","The program ran out of space, some shortcuts are not shown!")
             break
         sc = tk.Frame(shortcut_container, bg="red",width=100,height=100)
-        sc_button = tk.Button(sc,text = "Launch: " + selected.name,command=lambda p = selected.app_path: open_app(p))
+        sc_button = tk.Button(sc,text = "Launch: " + selected.name,command=lambda p = selected.app_path, t = selected.type, fp = selected.file_path: open_app(p,t,fp))
         sc_color = tk.Frame(sc, bg="red", width=200, height=150)
         delete_button = tk.Button(sc,text = "X", command=lambda i = index: delete_shortcut(i))
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
@@ -99,16 +101,39 @@ def create_loaded_shortcuts():
             c = 1
     shortcut_limit_text.config(text="Shortcuts created: " + str(len(data_manager.loaded_shortcuts)) + "/15")
 
-def open_app(path):
+def open_app(path,type,fpath):
     current_path.set(path)
+    current_type.set(type)
+    current_fpath.set(fpath)
+
     if not os.path.exists(current_path.get()):
         tkinter.messagebox.showerror("System Cannot Find Path!","Please make sure the path is valid!")
         return
 
-    if is_executable_file(current_path.get()):
-        subprocess.run([current_path.get()],timeout=2)
-    else:
-        tkinter.messagebox.showerror("Not executable!", "That path does not lead to an executable file!")
+    if current_type.get() == "app":
+        if is_executable_file(current_path.get()):
+            try:
+                # Attempt to run a command with a timeout of 5 seconds
+                result = subprocess.run([current_path.get()],timeout=2, check=True)
+                print("Command succeeded:", result)
+            except subprocess.TimeoutExpired:
+                print("The command timed out.")
+            except subprocess.CalledProcessError as e:
+                print("The command failed with return code:", e.returncode)
+        else:
+            tkinter.messagebox.showerror("NOT AN EXE", "That file is not an executable.")
+    elif current_type.get() == "file":
+        if is_executable_file(current_fpath.get()):
+            try:
+                # Attempt to run a command with a timeout of 5 seconds
+                result = subprocess.run([current_fpath.get(), current_path.get()],timeout=5, check=True)
+                print("Command succeeded:", result)
+            except subprocess.TimeoutExpired:
+                print("The command timed out.")
+            except subprocess.CalledProcessError as e:
+                print("The command failed with return code:", e.returncode)
+        else:
+            tkinter.messagebox.showerror("NOT AN EXE", "That file is not an executable.")
 
 
 #index is obtained from lambda funcion in delete button
@@ -126,19 +151,31 @@ def create_new_shortcut():
     )
 
     path = fd.askopenfilename(
-        title="Select an AppApper Profile",
+        title="Select an app to launch",
         initialdir=profile_dir,
         filetypes=filetypes
     )
-    print(path)
-    
+
+    sc_type = ""
+    apath = ""
+
+    if is_executable_file(path):
+        sc_type = "app"
+    else:
+        sc_type = "file"
+        apath = fd.askopenfilename(
+        title="Select an app to launch this file",
+        initialdir=profile_dir,
+        filetypes=filetypes
+        )
+
     id = 0
     if len(data_manager.loaded_shortcuts) > 0:
         id = data_manager.loaded_shortcuts[len(data_manager.loaded_shortcuts)-1].id+1
     else:
         id = 1
 
-    sc = shortcut(id,name,"app",path,"null","null",80,50)
+    sc = shortcut(id,name,sc_type,path,apath,"null",80,50)
     data_manager.loaded_shortcuts.append(sc)
 
     create_loaded_shortcuts()

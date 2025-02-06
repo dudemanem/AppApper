@@ -70,9 +70,14 @@ def read_profile_data(dir):
         type = sc_text[sc_commas[0]+1:sc_commas[1]]
         name = sc_text[sc_commas[1]+1:sc_commas[2]]
         app_path = sc_text[sc_commas[2]+1:sc_commas[3]]
-        print(app_path)
+        file_path = ""
+        if type == "file":
+            file_path = sc_text[sc_commas[3]+1:sc_commas[4]]
+        else:
+            file_path = "null"
+        print(f"app_path is {app_path}, and file_path is {file_path}")
         #fpath and ipath are null right now, they will be implemented later
-        sc = shortcut(id,name,type,app_path,"null","null",80,50)
+        sc = shortcut(id,name,type,app_path,file_path,"null",80,50)
         loaded_shortcuts.append(sc)
 
 
@@ -102,6 +107,8 @@ def compile_profile_data(name):
         data = data + "[" + str(sc.id) + "," + sc.type + "," + sc.name + ","
         if sc.type == "app":
             data = data + sc.app_path + ",]" + ","
+        elif sc.type == "file":
+            data = data + sc.app_path + "," + sc.file_path + ",]" + ","
     return data
 
 #saves data of current profile
