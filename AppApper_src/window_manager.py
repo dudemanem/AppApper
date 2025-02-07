@@ -114,7 +114,6 @@ def open_app(path,type,fpath):
     if current_type.get() == "app":
         if is_executable_file(current_path.get()):
             try:
-                # Attempt to run a command with a timeout of 5 seconds
                 result = subprocess.Popen([current_path.get()])
                 print("Command succeeded:", result)
             except subprocess.TimeoutExpired:
@@ -126,7 +125,6 @@ def open_app(path,type,fpath):
     elif current_type.get() == "file":
         if is_executable_file(current_fpath.get()):
             try:
-                # Attempt to run a command with a timeout of 5 seconds
                 result = subprocess.Popen([current_fpath.get(), current_path.get()])
                 print("Command succeeded:", result)
             except subprocess.TimeoutExpired:
