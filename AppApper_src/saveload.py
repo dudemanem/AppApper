@@ -12,13 +12,16 @@ loaded_profile_path = ""
 loaded_profile_name = ""
 
 #--------------------------------------------------------------------------------------------------------- path creation
-
-#creates save directory
+####################################################
+#creates save directory in the local AppData folder#
+####################################################
 def create_data_path_directory():
     os.mkdir(data_dir)
     tkinter.messagebox.showinfo("Directory Created!", "The save data directory has been created at " + data_dir)
 
-#creates global save file
+###################################################################################################################################
+#creates global save file for user settings, last loaded profile, etc. stuff that always should be loaded, currently a placeholder#
+###################################################################################################################################
 def create_data_save_file():
     with open(save_file_path, "w") as f:
         f.write("Test")
@@ -26,18 +29,23 @@ def create_data_save_file():
 
 #--------------------------------------------------------------------------------------------------------- loading
 
-#reads selected profile from dir
+###############################
+#reads selected profile's data#
+###############################
 def read_profile_data(dir):
     global loaded_shortcuts
 
+    #if path is empty return error to user
     if dir == "":
         tkinter.messagebox.showerror("No Path Given", "There was no path given to a profile!")
         return
 
+    #if somehow a directory that is not a file is given, return error to user
     if not os.path.isfile(dir):
         tkinter.messagebox.showerror("Not a File", "The given directory is not a file!")
         return
 
+    #reset loaded shortcuts
     loaded_shortcuts = []
 
     try:
@@ -52,10 +60,11 @@ def read_profile_data(dir):
     commas = [i for i, c in enumerate(data) if c == ","]
 
     #location of start and end of brackets in file. all shortcuts are contained in brackets, so this can be used to isolate the shortcut text.
+    #this will create errors if the shortcut has a bracket in it's path
     shortcut_start = [i for i, c in enumerate(data) if c == "["]
     shortcut_end = [i for i, c in enumerate(data) if c == "]"]
 
-    #loaded name
+    #loaded name - not currently used for anything
     profile_name = data[name_index:commas[0]]
     
     current_index = 0
@@ -80,8 +89,9 @@ def read_profile_data(dir):
         sc = shortcut(id,name,type,app_path,file_path,"null",80,50)
         loaded_shortcuts.append(sc)
 
-
-#opens prompt and passes profile file data to the read_profile_data function
+####################################################################################
+#opens file prompt and passes profile file data to the read_profile_data() function#
+####################################################################################
 def load_profile():
 
     filetypes = (
@@ -99,7 +109,9 @@ def load_profile():
 
 #--------------------------------------------------------------------------------------------------------- saving
 
-#compiles current data in an encoded profile save to be written to a text file
+###############################################################################
+#compiles current data in an encoded profile save to be written to a text file#
+###############################################################################
 def compile_profile_data(name):
     data = "@" + name + ","
 
@@ -111,7 +123,9 @@ def compile_profile_data(name):
             data = data + sc.app_path + "," + sc.file_path + ",]" + ","
     return data
 
-#saves data of current profile
+###############################
+#saves data of current profile#
+###############################
 def save_profile(text_field):
     name = text_field
     contents = compile_profile_data(name)
@@ -130,7 +144,9 @@ def save_profile(text_field):
 
 #--------------------------------------------------------------------------------------------------------- loading default save files and confirming that needed directories exist
 
-#loads app settings (such as default profile path) from app data. This is just a placeholder, these settings don't exist yet
+##############################################################################################################################
+#loads app settings (such as default profile path) from save file. This is just a placeholder, these settings don't exist yet#
+##############################################################################################################################
 def load_save_data():
 
     #display message and create path if doesn't exist
@@ -143,7 +159,7 @@ def load_save_data():
         create_data_save_file()
 
 
-
+#key for opening files in python
 '''
 "r"   Opens a file for reading only.
 "r+"  Opens a file for both reading and writing.

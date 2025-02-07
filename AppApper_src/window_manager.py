@@ -1,7 +1,6 @@
 import tkinter as tk
 from shortcut import *
 from metadata import *
-from pathlib import Path
 import saveload as data_manager
 import tkinter.messagebox
 import os as os
@@ -15,41 +14,37 @@ import stat
 
 #--------------------------------------------------------------------------------------------------------- Variables
 
-#sets up root 
 root = tk.Tk()
 root.title(app_display_name + " - " + app_version)
 #App Icon
-#root.iconbitmap(r'AppApper.ico') # - old code, ignore this shit
+#root.iconbitmap(r'AppApper.ico') # - this code is currently commented out because it would cause errors where the program couldn't find the path
 root.geometry(default_window_scale)
 root.resizable(1,1)
 
-current_path = tkinter.StringVar()
-current_type = tkinter.StringVar()
-current_fpath = tkinter.StringVar()
+current_path = tkinter.StringVar() # - the path for each shortcut. Assigned in open_app() based on what is passed in create_loaded_shortcuts()
+current_type = tkinter.StringVar() # - the type for each shortcut. Assigned in open_app() based on what is passed in create_loaded_shortcuts()
+current_fpath = tkinter.StringVar() # - the file path for each shortcut. Assigned in open_app() based on what is passed in create_loaded_shortcuts()
 
 
-#These are the default widgets of the app
-#|
-#\/
+#<<<<<<<<<<<<<<<
+#Default Widgets
+#<<<<<<<<<<<<<<<
 
-
-#toolbar - currently a placeholder for a toolbar
+#toolbar widgets
 toolbar_container = tk.Frame(root,bg="grey")
 toolbar_container.grid(row=0, column=0, sticky="nsew",columnspan=10,pady=0)
 for i in range(30):
     toolbar_container.grid_columnconfigure(i, weight=1)
-
-shortcut_container = tk.Frame(root,bg="silver")
-
-
-shortcut_limit_text = tk.Label(root,width=10,height=10,text="Profiles created: 0/15")
-    
-
-
 create_button = tk.Button(toolbar_container, text="Create Shortcut",command=lambda:create_new_shortcut())
 load_profile = tk.Button(toolbar_container, text="Load Profile",command=lambda:load_profile_process())
 profile_name = tk.Text(toolbar_container, height=1,width=15,)
 save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda : data_manager.save_profile(profile_name.get("1.0",'1.end')))
+
+#shortcut widgets
+shortcut_container = tk.Frame(root,bg="silver")
+shortcut_limit_text = tk.Label(root,width=10,height=10,text="Profiles created: 0/15")
+    
+
 
 #--------------------------------------------------------------------------------------------------------- Functions
 
@@ -63,25 +58,27 @@ def is_executable_file(path):
         return bool(st.st_mode & stat.S_IEXEC)
     return False
 
-
-
-#This funciton runs through all the current shortcuts and makes all of their ids run in linear order.
-#This is important because if a shortcut is deleted with the id of say, 4, then the shortcut that had the id of 5 should now be 4, and so on
+#############################################################################################################################################
+#This funciton runs through all the current shortcuts and makes all of their ids run in linear order.########################################
+#This is important because if a shortcut is deleted with the id of say, 4, then the shortcut that had the id of 5 should now be 4, and so on#
+#############################################################################################################################################
 def reset_shortcut_ids():
     for i in range(len(data_manager.loaded_shortcuts)):
         data_manager.loaded_shortcuts[i].id = (i + 1)
 
 
-
-#creates currently loaded shortcuts and displays them on the shortcut_container frame
+######################################################################################
+#creates currently loaded shortcuts and displays them on the shortcut_container frame#
+######################################################################################
 def create_loaded_shortcuts():
 
     for child in shortcut_container.winfo_children():
         child.destroy()
 
+    #column and row variables, determine column and row to place new shortcuts
     c = 1
     r = 1
-    #this index variable will be passed to the delete_shortcut function to let it know which shortcut needs to be deleted
+    #this index variable will be passed to the delete_shortcut() function to let it know which shortcut needs to be deleted
     index = 0
     for selected in data_manager.loaded_shortcuts:
         if r > 3:
@@ -139,14 +136,19 @@ def open_app(path,type,fpath):
         else:
             tkinter.messagebox.showerror("NOT AN EXE", "That file is not an executable.")
 
-
-#index is obtained from lambda funcion in delete button
-#this function removes the shortcut from the loaded list and calls the reset for the shortcut ids
+##################################################################################################
+#index is obtained from lambda funcion in delete button###########################################
+#this function removes the shortcut from the loaded list and calls the reset for the shortcut ids#
+##################################################################################################
 def delete_shortcut(index):
     data_manager.loaded_shortcuts.pop(index)
     reset_shortcut_ids()
     create_loaded_shortcuts()
-    
+
+######################################################################################################
+#opens dialogue for file picker and name of shortcut. If they choose an exe, it will create shortcut.#
+#If they choose file it will ask for another file that is an exe to open the file with################
+######################################################################################################
 def create_new_shortcut():
     name = tkinter.simpledialog.askstring("Enter Name", "Enter a name for this shortcut.")
     filetypes = (
@@ -155,7 +157,7 @@ def create_new_shortcut():
     )
 
     path = fd.askopenfilename(
-        title="Select an app to launch",
+        title="Select An App Or File To Launch",
         initialdir=profile_dir,
         filetypes=filetypes
     )
@@ -168,7 +170,7 @@ def create_new_shortcut():
     else:
         sc_type = "file"
         apath = fd.askopenfilename(
-        title="Select an app to launch this file",
+        title="Select An App To Launch This File",
         initialdir=profile_dir,
         filetypes=filetypes
         )
@@ -185,21 +187,25 @@ def create_new_shortcut():
     create_loaded_shortcuts()
     print(data_manager.loaded_shortcuts)
 
-
+########################################################
+#configures the organization of the root window's grid.#
+########################################################
 def configure_grid():
     for i in range(10):
         root.grid_columnconfigure(i, weight=1)  
     for i in range(100):
         root.grid_rowconfigure(i, weight=1)
         
-
-#loads profile and then tells program to reload shortcut widgets
+#################################################################
+#loads profile and then tells program to reload shortcut widgets#
+#################################################################
 def load_profile_process():
     data_manager.load_profile()
     create_loaded_shortcuts()
 
-
-#creates window and assigns the base window to root. ALso adds default widgets to grid
+#######################################################################################
+#creates window and assigns the base window to root. ALso adds default widgets to grid#
+#######################################################################################
 def innitialize_window():
     global root,create_button
 
