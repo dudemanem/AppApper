@@ -155,12 +155,14 @@ def create_new_shortcut():
     )
     path = ""
     
-    while path == "":
-        path = fd.askopenfilename(
-            title="Select An App Or File To Launch",
-            initialdir=profile_dir,
-            filetypes=filetypes
-        )
+    
+    path = fd.askopenfilename(
+        title="Select An App Or File To Launch",
+        filetypes=filetypes
+    )
+    if path == "":
+        tkinter.messagebox.showerror("Directory Error", "No file or app was given.")
+        return
 
     sc_type = ""
     apath = ""
@@ -168,13 +170,14 @@ def create_new_shortcut():
     if is_executable_file(path):
         sc_type = "app"
     else:
-        while apath == "":
-            sc_type = "file"
-            apath = fd.askopenfilename(
-            title="Select An App To Launch This File",
-            initialdir=profile_dir,
-            filetypes=filetypes
+        sc_type = "file"
+        apath = fd.askopenfilename(
+        title="Select An App To Launch This File",
+        filetypes=filetypes
         )
+        if apath == "":
+            tkinter.messagebox.showerror("Directory Error", "No app was given.")
+            return
 
     id = 0
     if len(data_manager.loaded_shortcuts) > 0:

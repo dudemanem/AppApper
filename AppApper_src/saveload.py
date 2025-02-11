@@ -136,7 +136,7 @@ def compile_profile_data(name):
 def save_profile(text_field):
     name = text_field
     contents = compile_profile_data(name)
-    print(name)
+
     if not os.path.exists(profile_dir):
         tkinter.messagebox.showerror("Missing Profile Directory", "Profile directory at " + profile_dir + " is missing. it has now been created!")
         os.makedirs(profile_dir)
@@ -147,7 +147,7 @@ def save_profile(text_field):
     
     with open(profile_dir + "\\" + name + ".txt", "w") as f:
         f.write(contents)
-    tkinter.messagebox.showinfo("Profile Created", 'Profile "' + name + '" has been created!')
+    tkinter.messagebox.showinfo("Profile Saved", 'Profile "' + name + '" has been saved!')
 
 #--------------------------------------------------------------------------------------------------------- loading default save files and confirming that needed directories exist
 
@@ -158,11 +158,11 @@ def load_save_data():
 
     #display message and create path if doesn't exist
     if not os.path.isdir(data_dir):
-        tkinter.messagebox.showerror("Error", "The application data path at " + data_dir + " does not exist. It will now be created.")
+        tkinter.messagebox.showerror("Directory Error", "The application data path at " + data_dir + " does not exist. It will now be created.")
         create_data_path_directory()
     #display message and create save file if doesn't exist
     if not os.path.exists(save_file_path):
-        tkinter.messagebox.showerror("Directory Error", "There is no save file at " + save_file_path + " It will be created")
+        tkinter.messagebox.showerror("Directory Error", "There is no save file at " + save_file_path + ". It will be created")
         create_data_save_file()
 
 
