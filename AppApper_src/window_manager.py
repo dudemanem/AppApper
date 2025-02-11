@@ -108,7 +108,7 @@ def open_app(path,type,fpath):
     current_fpath.set(fpath)
 
     if not os.path.exists(current_path.get()):
-        tkinter.messagebox.showerror("System Cannot Find Path!","Please make sure the path is valid!")
+        tkinter.messagebox.showerror("Directory Error","Please make sure the path is valid!")
         return
 
     if current_type.get() == "app":
