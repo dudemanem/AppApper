@@ -153,12 +153,14 @@ def create_new_shortcut():
         ('All files', '*.*'),
         ('text files', '*.txt')
     )
-
-    path = fd.askopenfilename(
-        title="Select An App Or File To Launch",
-        initialdir=profile_dir,
-        filetypes=filetypes
-    )
+    path = ""
+    
+    while path == "":
+        path = fd.askopenfilename(
+            title="Select An App Or File To Launch",
+            initialdir=profile_dir,
+            filetypes=filetypes
+        )
 
     sc_type = ""
     apath = ""
@@ -166,11 +168,12 @@ def create_new_shortcut():
     if is_executable_file(path):
         sc_type = "app"
     else:
-        sc_type = "file"
-        apath = fd.askopenfilename(
-        title="Select An App To Launch This File",
-        initialdir=profile_dir,
-        filetypes=filetypes
+        while apath == "":
+            sc_type = "file"
+            apath = fd.askopenfilename(
+            title="Select An App To Launch This File",
+            initialdir=profile_dir,
+            filetypes=filetypes
         )
 
     id = 0
