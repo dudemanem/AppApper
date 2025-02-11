@@ -149,6 +149,8 @@ def delete_shortcut(index):
 ######################################################################################################
 def create_new_shortcut():
     name = tkinter.simpledialog.askstring("Enter Name", "Enter a name for this shortcut.")
+    if name == "":
+        return
     filetypes = (
         ('All files', '*.*'),
         ('text files', '*.txt')
