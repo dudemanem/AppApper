@@ -84,12 +84,11 @@ def read_profile_data(dir):
                 app_path = sc_text[sc_commas[2]+1:sc_commas[3]]
                 icon_path = sc_text[sc_commas[4]+1:sc_commas[5]]
                 file_path = ""
-                if type == "file":
-                    
+                if type == "file":  
                     file_path = sc_text[sc_commas[3]+1:sc_commas[4]]
                 else:
                     file_path = "null"
-                print(f"app_path is {app_path}, and file_path is {file_path}")
+                print(f"app_path is {app_path}, and file_path is {file_path}, and icon path is {icon_path}")
                 #fpath and ipath are null right now, they will be implemented later
                 sc = shortcut(id,name,type,app_path,file_path,icon_path,80,50)
                 loaded_shortcuts.append(sc)

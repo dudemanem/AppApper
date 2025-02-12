@@ -8,6 +8,9 @@ import subprocess
 import tkinter.simpledialog 
 from tkinter import filedialog as fd
 import stat
+from PIL import Image, ImageOps,ImageTk
+from tkinter import PhotoImage
+import shutil
 
 
 
@@ -86,11 +89,22 @@ def create_loaded_shortcuts():
             break
         sc = tk.Frame(shortcut_container, bg="red",width=100,height=100)
         sc_button = tk.Button(sc,text = "Launch: " + selected.name,command=lambda p = selected.app_path, t = selected.type, fp = selected.file_path: open_app(p,t,fp))
-        sc_color = tk.Frame(sc, bg="red", width=200, height=150)
+        sc_color = ""
+        sc_image = ""
+        icon = ""
+        if selected.icon_path == "null":
+            sc_color = tk.Frame(sc, bg="red", width=200, height=150)
+        else:
+            print(selected.icon_path)
+            icon = ImageTk.PhotoImage(Image.open(selected.icon_path))
+            sc_image = tk.Label(sc,image=icon,width=200,height=150)
         delete_button = tk.Button(sc,text = "X", command=lambda i = index: delete_shortcut(i))
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
         sc_button.pack(expand=True,fill="both")
-        sc_color.pack(expand=True,fill="both")
+        if selected.icon_path == "null":
+            sc_color.pack(expand=True,fill="both")
+        else:
+            sc_image.pack(expand=True,fill="both")
         delete_button.pack(expand=True,fill="both")
         c += 1
         index += 1
@@ -155,6 +169,9 @@ def create_new_shortcut():
         ('All files', '*.*'),
         ('text files', '*.txt')
     )
+    imagetypes = (
+        ('png files', '*.png'),
+    )
     path = ""
     
     
@@ -180,6 +197,21 @@ def create_new_shortcut():
         if apath == "":
             tkinter.messagebox.showerror("Directory Error", "No app was given.")
             return
+        
+    ipath = ""
+    
+    ipath = fd.askopenfilename(
+        title="Select An Image",
+        filetypes=imagetypes
+    )
+    if ipath == "":
+        tkinter.messagebox.showerror("Directory Error", "No image was given.")
+        return
+    icon = Image.open(ipath,"r")
+    new_size = (200,150)
+    icon = ImageOps.fit(icon,new_size,Image.Resampling.LANCZOS)
+    ipath = data_dir + "\\" + name + ".png"
+    icon.save(ipath, "PNG")
 
     id = 0
     if len(data_manager.loaded_shortcuts) > 0:
@@ -187,7 +219,7 @@ def create_new_shortcut():
     else:
         id = 1
 
-    sc = shortcut(id,name,sc_type,path,apath,"null",80,50)
+    sc = shortcut(id,name,sc_type,path,apath,ipath,80,50)
     data_manager.loaded_shortcuts.append(sc)
 
     create_loaded_shortcuts()
