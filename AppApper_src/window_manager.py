@@ -46,10 +46,48 @@ save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda
 #shortcut widgets
 shortcut_container = tk.Frame(root,bg="silver")
 shortcut_limit_text = tk.Label(root,width=10,height=10,text="Profiles created: 0/15")
+
+image_list = []
     
 
 
 #--------------------------------------------------------------------------------------------------------- Functions
+
+#####################################################################################################
+#this function extracts icon from an exe and returns path to newly copied png file in data directory#
+#####################################################################################################
+def extract_icon_from_exe(path,name,icon_out_path):
+    import win32ui
+    import win32gui
+    import win32con
+    import win32api
+
+    ico_x = win32api.GetSystemMetrics(win32con.SM_CXICON)
+    ico_y = win32api.GetSystemMetrics(win32con.SM_CYICON)
+
+    large, small = win32gui.ExtractIconEx(path,0)
+    win32gui.DestroyIcon(small[0])
+
+    hdc = win32ui.CreateDCFromHandle( win32gui.GetDC(0) )
+    hbmp = win32ui.CreateBitmap()
+    hbmp.CreateCompatibleBitmap( hdc, ico_x, ico_x )
+    hdc = hdc.CreateCompatibleDC()
+
+    hdc.SelectObject( hbmp )
+    hdc.DrawIcon( (0,0), large[0] )
+
+    bmpstr = hbmp.GetBitmapBits(True)
+    icon = Image.frombuffer(
+        'RGBA',
+        (32,32),
+        bmpstr, 'raw', 'BGRA', 0, 1
+    )
+
+    full_outpath = os.path.join(icon_out_path, "{}.png".format(name))
+    icon.resize((200, 150))
+    icon.save(full_outpath, 'PNG')
+    return full_outpath
+    
 
 ########################################################
 #Checks if given path is an executable file for windows#
@@ -112,6 +150,7 @@ def create_loaded_shortcuts():
     for child in shortcut_container.winfo_children():
         child.destroy()
 
+    image_list = []
     #column and row variables, determine column and row to place new shortcuts
     c = 1
     r = 1
@@ -131,7 +170,8 @@ def create_loaded_shortcuts():
         else:
             print(selected.icon_path)
             icon = ImageTk.PhotoImage(Image.open(selected.icon_path))
-            sc_image = tk.Label(sc,image=icon,width=200,height=150)
+            image_list.append(icon)
+            sc_image = tk.Label(sc,image=image_list[index],width=200,height=150)
         image_button = tk.Button(sc,text = "Change Image", command=lambda i = index: set_shortcut_image(i))
         delete_button = tk.Button(sc,text = "X", command=lambda i = index: delete_shortcut(i))
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
@@ -225,10 +265,13 @@ def create_new_shortcut():
 
     sc_type = ""
 
+    ipath = "null"
+
     #ask for an app if the path leads to a file instead of exe
     apath = ""
     if is_executable_file(path):
         sc_type = "app"
+        ipath = extract_icon_from_exe(path,name,data_dir)
     else:
         sc_type = "file"
         apath = fd.askopenfilename(
@@ -238,7 +281,9 @@ def create_new_shortcut():
         if apath == "":
             tkinter.messagebox.showerror("Directory Error", "No app was given.")
             return
-    ipath = "null"
+        ipath = extract_icon_from_exe(apath,name,data_dir)
+        
+
     '''ipath = get_image()
     if ipath == "":
         tkinter.messagebox.showerror("Directory Error", "No image was given.")
