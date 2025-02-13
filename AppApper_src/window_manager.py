@@ -86,6 +86,8 @@ def get_image():
 #this function takes the image at the given path and copies/resizes it at a new location, then returns the path to this new location.#
 ######################################################################################################################################
 def image_to_icon(ipath,name):
+    if ipath == None:
+        return
     icon = Image.open(ipath,"r")
     new_size = (200,150)
     icon = ImageOps.fit(icon,new_size,Image.Resampling.LANCZOS)
@@ -93,14 +95,15 @@ def image_to_icon(ipath,name):
     icon.save(ipath, "PNG")
     return ipath
 
-####################################################################################################################################
-#This function sets the ipath of the shortcut in the given index to a resized version of the image at the path given by get_image()#
-####################################################################################################################################
-def set_shortcut_image(shortcut_index):
-    ipath = get_image()
-    icon = image_to_icon(ipath)
+##################################################################################################
+#index is obtained from lambda funcion in delete button###########################################
+#this function removes the shortcut from the loaded list and calls the reset for the shortcut ids#
+##################################################################################################
+def delete_shortcut(index):
+    data_manager.loaded_shortcuts.pop(index)
+    reset_shortcut_ids()
+    create_loaded_shortcuts()
     
-
 ######################################################################################
 #creates currently loaded shortcuts and displays them on the shortcut_container frame#
 ######################################################################################
@@ -129,6 +132,7 @@ def create_loaded_shortcuts():
             print(selected.icon_path)
             icon = ImageTk.PhotoImage(Image.open(selected.icon_path))
             sc_image = tk.Label(sc,image=icon,width=200,height=150)
+        image_button = tk.Button(sc,text = "Change Image", command=lambda i = index: set_shortcut_image(i))
         delete_button = tk.Button(sc,text = "X", command=lambda i = index: delete_shortcut(i))
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
         sc_button.pack(expand=True,fill="both")
@@ -136,6 +140,7 @@ def create_loaded_shortcuts():
             sc_color.pack(expand=True,fill="both")
         else:
             sc_image.pack(expand=True,fill="both")
+        image_button.pack(expand=True,fill="both")
         delete_button.pack(expand=True,fill="both")
         c += 1
         index += 1
@@ -143,6 +148,16 @@ def create_loaded_shortcuts():
             r += 1
             c = 1
     shortcut_limit_text.config(text="Shortcuts created: " + str(len(data_manager.loaded_shortcuts)) + "/15")
+
+####################################################################################################################################
+#This function sets the ipath of the shortcut in the given index to a resized version of the image at the path given by get_image()#
+####################################################################################################################################
+def set_shortcut_image(shortcut_index):
+    ipath = get_image()
+    icon = image_to_icon(ipath,data_manager.loaded_shortcuts[shortcut_index].name + "_image_icon")
+    data_manager.loaded_shortcuts[shortcut_index].icon_path = icon
+    print(data_manager.loaded_shortcuts[shortcut_index].icon_path)
+    create_loaded_shortcuts()
 
 ############################################################################
 #This opens the app or the file and an associated app that are passed to it#
@@ -181,14 +196,6 @@ def open_app(path,type,fpath):
             tkinter.messagebox.showerror("Not an EXE", "That file is not an executable.")
             return
 
-##################################################################################################
-#index is obtained from lambda funcion in delete button###########################################
-#this function removes the shortcut from the loaded list and calls the reset for the shortcut ids#
-##################################################################################################
-def delete_shortcut(index):
-    data_manager.loaded_shortcuts.pop(index)
-    reset_shortcut_ids()
-    create_loaded_shortcuts()
 
 ######################################################################################################
 #opens dialogue for file picker and name of shortcut. If they choose an exe, it will create shortcut.#
@@ -231,12 +238,12 @@ def create_new_shortcut():
         if apath == "":
             tkinter.messagebox.showerror("Directory Error", "No app was given.")
             return
-        
-    ipath = get_image()
+    ipath = "null"
+    '''ipath = get_image()
     if ipath == "":
         tkinter.messagebox.showerror("Directory Error", "No image was given.")
         return
-    ipath = image_to_icon(ipath,name)
+    ipath = image_to_icon(ipath,name)'''
     
 
     #set id of shortcut based on previous ones
@@ -261,9 +268,9 @@ def configure_grid():
     for i in range(100):
         root.grid_rowconfigure(i, weight=1)
         
-#################################################################
-#loads profile and then tells program to reload shortcut widgets#
-#################################################################
+###################################################################################
+#loads profile and then tells program to reload shortcut widgets - same for saving#
+###################################################################################
 def load_profile_process():
     data_manager.load_profile()
     create_loaded_shortcuts()
@@ -290,6 +297,5 @@ def innitialize_window():
 
     #load default save data
     data_manager.load_save_data()
-    
 
     root.mainloop()
