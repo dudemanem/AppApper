@@ -69,6 +69,37 @@ def reset_shortcut_ids():
     for i in range(len(data_manager.loaded_shortcuts)):
         data_manager.loaded_shortcuts[i].id = (i + 1)
 
+#############################################################
+#This function returns the path to an image selected by user#
+#############################################################
+def get_image():
+    imagetypes = (
+        ('png files', '*.png'),
+    )
+    ipath = fd.askopenfilename(
+        title="Select An Image",
+        filetypes=imagetypes
+    )
+    return ipath
+
+######################################################################################################################################
+#this function takes the image at the given path and copies/resizes it at a new location, then returns the path to this new location.#
+######################################################################################################################################
+def image_to_icon(ipath,name):
+    icon = Image.open(ipath,"r")
+    new_size = (200,150)
+    icon = ImageOps.fit(icon,new_size,Image.Resampling.LANCZOS)
+    ipath = data_dir + "\\" + name + ".png"
+    icon.save(ipath, "PNG")
+    return ipath
+
+####################################################################################################################################
+#This function sets the ipath of the shortcut in the given index to a resized version of the image at the path given by get_image()#
+####################################################################################################################################
+def set_shortcut_image(shortcut_index):
+    ipath = get_image()
+    icon = image_to_icon(ipath)
+    
 
 ######################################################################################
 #creates currently loaded shortcuts and displays them on the shortcut_container frame#
@@ -162,19 +193,19 @@ def delete_shortcut(index):
 #If they choose file it will ask for another file that is an exe to open the file with################
 ######################################################################################################
 def create_new_shortcut():
+    #ask for name and exit if none is given
     name = tkinter.simpledialog.askstring("Enter Name", "Enter a name for this shortcut.")
     if name == "":
         return
+    
+    #set file types that are supported when picking path
     filetypes = (
         ('All files', '*.*'),
         ('text files', '*.txt')
     )
-    imagetypes = (
-        ('png files', '*.png'),
-    )
-    path = ""
     
-    
+    #Get base path to file or app
+    path = ""    
     path = fd.askopenfilename(
         title="Select An App Or File To Launch",
         filetypes=filetypes
@@ -184,8 +215,9 @@ def create_new_shortcut():
         return
 
     sc_type = ""
-    apath = ""
 
+    #ask for an app if the path leads to a file instead of exe
+    apath = ""
     if is_executable_file(path):
         sc_type = "app"
     else:
@@ -198,21 +230,14 @@ def create_new_shortcut():
             tkinter.messagebox.showerror("Directory Error", "No app was given.")
             return
         
-    ipath = ""
-    
-    ipath = fd.askopenfilename(
-        title="Select An Image",
-        filetypes=imagetypes
-    )
+    ipath = get_image()
     if ipath == "":
         tkinter.messagebox.showerror("Directory Error", "No image was given.")
         return
-    icon = Image.open(ipath,"r")
-    new_size = (200,150)
-    icon = ImageOps.fit(icon,new_size,Image.Resampling.LANCZOS)
-    ipath = data_dir + "\\" + name + ".png"
-    icon.save(ipath, "PNG")
+    ipath = image_to_icon(ipath,name)
+    
 
+    #set id of shortcut based on previous ones
     id = 0
     if len(data_manager.loaded_shortcuts) > 0:
         id = data_manager.loaded_shortcuts[len(data_manager.loaded_shortcuts)-1].id+1
