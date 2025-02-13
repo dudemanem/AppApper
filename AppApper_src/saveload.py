@@ -42,7 +42,7 @@ def read_profile_data(dir):
 
     #if somehow a directory that is not a file is given, return error to user
     if not os.path.isfile(dir):
-        tkinter.messagebox.showerror("Not a File", "The given directory is not a file!")
+        tkinter.messagebox.showerror("Not A File", "The given directory is not a file!")
         return
 
     #reset loaded shortcuts
@@ -65,29 +65,39 @@ def read_profile_data(dir):
     shortcut_end = [i for i, c in enumerate(data) if c == "]"]
 
     #loaded name - not currently used for anything
-    profile_name = data[name_index:commas[0]]
-    
-    current_index = 0
-    for i in range(len(shortcut_start)):
-
-        sc_text = data[shortcut_start[current_index]+1:shortcut_end[current_index]]
-        current_index += 1
-        #location of commas in the specific isolated shortcut text
-        sc_commas = [i for i, c in enumerate(sc_text) if c == ","]
-        #loaded values for the shortcut class
-        id = int(sc_text[0:sc_commas[0]])
-        type = sc_text[sc_commas[0]+1:sc_commas[1]]
-        name = sc_text[sc_commas[1]+1:sc_commas[2]]
-        app_path = sc_text[sc_commas[2]+1:sc_commas[3]]
-        file_path = ""
-        if type == "file":
-            file_path = sc_text[sc_commas[3]+1:sc_commas[4]]
-        else:
-            file_path = "null"
-        print(f"app_path is {app_path}, and file_path is {file_path}")
-        #fpath and ipath are null right now, they will be implemented later
-        sc = shortcut(id,name,type,app_path,file_path,"null",80,50)
-        loaded_shortcuts.append(sc)
+    try:
+        profile_name = data[name_index:commas[0]]
+    except:
+        return
+    try:
+        current_index = 0
+        for i in range(len(shortcut_start)):
+            
+                sc_text = data[shortcut_start[current_index]+1:shortcut_end[current_index]]
+                current_index += 1
+                #location of commas in the specific isolated shortcut text
+                sc_commas = [i for i, c in enumerate(sc_text) if c == ","]
+                #loaded values for the shortcut class
+                id = int(sc_text[0:sc_commas[0]])
+                type = sc_text[sc_commas[0]+1:sc_commas[1]]
+                name = sc_text[sc_commas[1]+1:sc_commas[2]]
+                app_path = sc_text[sc_commas[2]+1:sc_commas[3]]
+                icon_path = sc_text[sc_commas[4]+1:sc_commas[5]]
+                file_path = ""
+                if type == "file":  
+                    file_path = sc_text[sc_commas[3]+1:sc_commas[4]]
+                else:
+                    file_path = "null"
+                print(f"app_path is {app_path}, and file_path is {file_path}, and icon path is {icon_path}")
+                #fpath and ipath are null right now, they will be implemented later
+                sc = shortcut(id,name,type,app_path,file_path,icon_path,80,50)
+                loaded_shortcuts.append(sc)
+    except IndexError:
+        tkinter.messagebox.showerror("Index Out Of Range Error", "There was an error reading the profile. It could be because this profile was created before an update, or the profile's text has been modified.")
+        return
+    except:
+        tkinter.messagebox.showerror("Unforseen Error", "An error occurred while reading the profile.")
+        return
 
 ####################################################################################
 #opens file prompt and passes profile file data to the read_profile_data() function#
@@ -104,7 +114,6 @@ def load_profile():
         initialdir=profile_dir,
         filetypes=filetypes
     )
-    print(file_path)
     read_profile_data(file_path)
 
 #--------------------------------------------------------------------------------------------------------- saving
@@ -117,10 +126,7 @@ def compile_profile_data(name):
 
     for sc in loaded_shortcuts:
         data = data + "[" + str(sc.id) + "," + sc.type + "," + sc.name + ","
-        if sc.type == "app":
-            data = data + sc.app_path + ",]" + ","
-        elif sc.type == "file":
-            data = data + sc.app_path + "," + sc.file_path + ",]" + ","
+        data = data + sc.app_path + "," + sc.file_path + "," + sc.icon_path + ",]" + ","
     return data
 
 ###############################
@@ -129,7 +135,7 @@ def compile_profile_data(name):
 def save_profile(text_field):
     name = text_field
     contents = compile_profile_data(name)
-    print(name)
+
     if not os.path.exists(profile_dir):
         tkinter.messagebox.showerror("Missing Profile Directory", "Profile directory at " + profile_dir + " is missing. it has now been created!")
         os.makedirs(profile_dir)
@@ -140,7 +146,7 @@ def save_profile(text_field):
     
     with open(profile_dir + "\\" + name + ".txt", "w") as f:
         f.write(contents)
-    tkinter.messagebox.showinfo("Profile Created", 'Profile "' + name + '" has been created!')
+    tkinter.messagebox.showinfo("Profile Saved", 'Profile "' + name + '" has been saved!')
 
 #--------------------------------------------------------------------------------------------------------- loading default save files and confirming that needed directories exist
 
@@ -151,11 +157,11 @@ def load_save_data():
 
     #display message and create path if doesn't exist
     if not os.path.isdir(data_dir):
-        tkinter.messagebox.showerror("Error", "The application data path at " + data_dir + " does not exist. It will now be created.")
+        tkinter.messagebox.showerror("Directory Error", "The application data path at " + data_dir + " does not exist. It will now be created.")
         create_data_path_directory()
     #display message and create save file if doesn't exist
     if not os.path.exists(save_file_path):
-        tkinter.messagebox.showerror("Directory Error", "There is no save file at " + save_file_path + " It will be created")
+        tkinter.messagebox.showerror("Directory Error", "There is no save file at " + save_file_path + ". It will be created")
         create_data_save_file()
 
 
