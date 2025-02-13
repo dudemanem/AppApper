@@ -38,7 +38,7 @@ toolbar_container = tk.Frame(root,bg="grey")
 toolbar_container.grid(row=0, column=0, sticky="nsew",columnspan=10,pady=0)
 for i in range(30):
     toolbar_container.grid_columnconfigure(i, weight=1)
-create_button = tk.Button(toolbar_container, text="Create Shortcut",command=lambda:create_new_shortcut(),background="light green")
+create_button = tk.Button(toolbar_container, text="Create Shortcut",command=lambda:create_shortcut_process(),background="light green")
 load_profile = tk.Button(toolbar_container, text="Load Profile",command=lambda:load_profile_process(),background="yellow")
 profile_name = tk.Text(toolbar_container, height=1,width=15,)
 save_profile = tk.Button(toolbar_container, text="Save Profile", command= lambda : save_profile_process(),background="orange")
@@ -277,6 +277,10 @@ def load_profile_process():
 
 def save_profile_process():
     data_manager.save_profile(profile_name.get("1.0",'1.end'))
+    create_loaded_shortcuts()
+
+def create_shortcut_process():
+    create_new_shortcut()
     create_loaded_shortcuts()
 
 #######################################################################################
