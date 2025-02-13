@@ -166,7 +166,8 @@ def open_app(path,type,fpath):
             except subprocess.CalledProcessError as e:
                 print("The command failed with return code:", e.returncode)
         else:
-            tkinter.messagebox.showerror("NOT AN EXE", "That file is not an executable.")
+            tkinter.messagebox.showerror("Not an EXE", "That file is not an executable.")
+            return
     elif current_type.get() == "file":
         if is_executable_file(current_fpath.get()):
             try:
@@ -177,7 +178,8 @@ def open_app(path,type,fpath):
             except subprocess.CalledProcessError as e:
                 print("The command failed with return code:", e.returncode)
         else:
-            tkinter.messagebox.showerror("NOT AN EXE", "That file is not an executable.")
+            tkinter.messagebox.showerror("Not an EXE", "That file is not an executable.")
+            return
 
 ##################################################################################################
 #index is obtained from lambda funcion in delete button###########################################
