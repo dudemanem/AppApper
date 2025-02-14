@@ -11,7 +11,7 @@ import random as random
 def gen_string():
     s = ""
     for i in range(5):
-        s = s + icon_name_extenstion_characters[random.randint(0,len(icon_name_extenstion_characters))]
+        s = s + icon_name_extenstion_characters[random.randint(0,len(icon_name_extenstion_characters)-1)]
     return s
 
 
