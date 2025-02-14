@@ -123,7 +123,7 @@ def create_loaded_shortcuts():
         delete_button = tk.Button(sc,text = "X", command=lambda i = index: delete_shortcut(i))
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
         sc_button.pack(expand=True,fill="both")
-        if selected.icon_path == "null":
+        if selected.icon_path == "null" or not os.path.isfile(selected.icon_path):
             sc_color.pack(expand=True,fill="both")
         else:
             sc_image.pack(expand=True,fill="both")
