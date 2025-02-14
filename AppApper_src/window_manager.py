@@ -110,15 +110,20 @@ def reset_shortcut_ids():
 #############################################################
 #This function returns the path to an image selected by user#
 #############################################################
-def get_image():
+def get_image(name):
     imagetypes = (
         ('png files', '*.png'),
+        ('exe icons', '*.exe')
     )
-    ipath = fd.askopenfilename(
+    image_path = fd.askopenfilename(
         title="Select An Image",
         filetypes=imagetypes
     )
-    return ipath
+    if is_executable_file(image_path):
+        return extract_icon_from_exe(image_path,name,data_dir)
+    else:
+        image = image_to_icon(image_path,name + "_image_icon")
+        return image
 
 ######################################################################################################################################
 #this function takes the image at the given path and copies/resizes it at a new location, then returns the path to this new location.#
@@ -194,8 +199,8 @@ def create_loaded_shortcuts():
 #This function sets the ipath of the shortcut in the given index to a resized version of the image at the path given by get_image()#
 ####################################################################################################################################
 def set_shortcut_image(shortcut_index):
-    ipath = get_image()
-    icon = image_to_icon(ipath,data_manager.loaded_shortcuts[shortcut_index].name + "_image_icon")
+    icon = get_image(data_manager.loaded_shortcuts[shortcut_index].name)
+    
     data_manager.loaded_shortcuts[shortcut_index].icon_path = icon
     print(data_manager.loaded_shortcuts[shortcut_index].icon_path)
     create_loaded_shortcuts()
