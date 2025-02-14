@@ -89,9 +89,13 @@ def read_profile_data(dir):
                 else:
                     file_path = "null"
                 print(f"app_path is {app_path}, and file_path is {file_path}, and icon path is {icon_path}")
-                #fpath and ipath are null right now, they will be implemented later
-                sc = shortcut(id,name,type,app_path,file_path,icon_path,80,50)
-                loaded_shortcuts.append(sc)
+                if os.path.isfile(icon_path) and os.path.isfile(file_path) and (not icon_path == "null" and os.path.isfile(icon_path)):
+                    sc = shortcut(id,name,type,app_path,file_path,icon_path,80,50)
+                    loaded_shortcuts.append(sc)
+                else:
+                    tkinter.messagebox.showerror("Loading Error", "There was an error loading the profile.")
+                    loaded_shortcuts = []
+
     except IndexError:
         tkinter.messagebox.showerror("Index Out Of Range Error", "There was an error reading the profile. It could be because this profile was created before an update, or the profile's text has been modified.")
         return

@@ -172,6 +172,7 @@ def create_loaded_shortcuts():
             icon = ImageTk.PhotoImage(Image.open(selected.icon_path))
             image_list.append(icon)
             sc_image = tk.Label(sc,image=image_list[index],width=200,height=150)
+            sc_image.image = icon
         image_button = tk.Button(sc,text = "Change Image", command=lambda i = index: set_shortcut_image(i))
         delete_button = tk.Button(sc,text = "X", command=lambda i = index: delete_shortcut(i))
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
