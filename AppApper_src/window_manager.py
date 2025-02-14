@@ -144,7 +144,8 @@ def change_shortcut_image(shortcut_index):
     icon = get_image(data_manager.loaded_shortcuts[shortcut_index].name)
     if not icon == None:
         data_manager.loaded_shortcuts[shortcut_index].icon_path = icon
-        os.remove(old_image)
+        if os.path.isfile(old_image):
+            os.remove(old_image)
         print(data_manager.loaded_shortcuts[shortcut_index].icon_path)
         create_loaded_shortcuts()
 
