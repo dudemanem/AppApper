@@ -2,7 +2,7 @@ from tkinter import PhotoImage
 import os
 
 #contains basic data about app
-app_version = "v1.1.8 - beta"
+app_version = "v1.1.9 - beta"
 app_display_name = "AppApper"
 default_window_scale = "1300x750"
 #icon_path = 'images\icon\AppApper.png'

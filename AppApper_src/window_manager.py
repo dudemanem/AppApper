@@ -7,10 +7,8 @@ import os as os
 import subprocess
 import tkinter.simpledialog 
 from tkinter import filedialog as fd
-import stat
 from PIL import Image, ImageOps,ImageTk
-from tkinter import PhotoImage
-import shutil
+import tools as tools
 
 
 
@@ -53,52 +51,6 @@ image_list = []
 
 #--------------------------------------------------------------------------------------------------------- Functions
 
-#####################################################################################################
-#this function extracts icon from an exe and returns path to newly copied png file in data directory#
-#####################################################################################################
-def extract_icon_from_exe(path,name,icon_out_path):
-    import win32ui
-    import win32gui
-    import win32con
-    import win32api
-
-    ico_x = win32api.GetSystemMetrics(win32con.SM_CXICON)
-    ico_y = win32api.GetSystemMetrics(win32con.SM_CYICON)
-
-    large, small = win32gui.ExtractIconEx(path,0)
-    win32gui.DestroyIcon(small[0])
-
-    hdc = win32ui.CreateDCFromHandle( win32gui.GetDC(0) )
-    hbmp = win32ui.CreateBitmap()
-    hbmp.CreateCompatibleBitmap( hdc, ico_x, ico_x )
-    hdc = hdc.CreateCompatibleDC()
-
-    hdc.SelectObject( hbmp )
-    hdc.DrawIcon( (0,0), large[0] )
-
-    bmpstr = hbmp.GetBitmapBits(True)
-    icon = Image.frombuffer(
-        'RGBA',
-        (32,32),
-        bmpstr, 'raw', 'BGRA', 0, 1
-    )
-
-    full_outpath = os.path.join(icon_out_path, "{}.png".format(name))
-    icon.resize((200, 150))
-    icon.save(full_outpath, 'PNG')
-    return full_outpath
-    
-
-########################################################
-#Checks if given path is an executable file for windows#
-########################################################
-def is_executable_file(path):
-    if os.path.isfile(path):
-        # Check if the file has execute permissions
-        st = os.stat(path)
-        return bool(st.st_mode & stat.S_IEXEC)
-    return False
-
 #############################################################################################################################################
 #This funciton runs through all the current shortcuts and makes all of their ids run in linear order.########################################
 #This is important because if a shortcut is deleted with the id of say, 4, then the shortcut that had the id of 5 should now be 4, and so on#
@@ -119,24 +71,11 @@ def get_image(name):
         title="Select An Image",
         filetypes=imagetypes
     )
-    if is_executable_file(image_path):
-        return extract_icon_from_exe(image_path,name,data_dir)
+    if tools.is_executable_file(image_path):
+        return tools.extract_icon_from_exe(image_path,name,data_dir)
     else:
-        image = image_to_icon(image_path,name + "_image_icon")
+        image = tools.image_to_icon(image_path,name + "_image_icon")
         return image
-
-######################################################################################################################################
-#this function takes the image at the given path and copies/resizes it at a new location, then returns the path to this new location.#
-######################################################################################################################################
-def image_to_icon(ipath,name):
-    if ipath == None:
-        return
-    icon = Image.open(ipath,"r")
-    new_size = (200,150)
-    icon = ImageOps.fit(icon,new_size,Image.Resampling.LANCZOS)
-    ipath = data_dir + "\\" + name + ".png"
-    icon.save(ipath, "PNG")
-    return ipath
 
 ##################################################################################################
 #index is obtained from lambda funcion in delete button###########################################
@@ -218,7 +157,7 @@ def open_app(path,type,fpath):
         return
 
     if current_type.get() == "app":
-        if is_executable_file(current_path.get()):
+        if tools.is_executable_file(current_path.get()):
             try:
                 result = subprocess.Popen([current_path.get()])
                 print("Command succeeded:", result)
@@ -230,7 +169,7 @@ def open_app(path,type,fpath):
             tkinter.messagebox.showerror("Not an EXE", "That file is not an executable.")
             return
     elif current_type.get() == "file":
-        if is_executable_file(current_fpath.get()):
+        if tools.is_executable_file(current_fpath.get()):
             try:
                 result = subprocess.Popen([current_fpath.get(), current_path.get()])
                 print("Command succeeded:", result)
@@ -275,9 +214,9 @@ def create_new_shortcut():
 
     #ask for an app if the path leads to a file instead of exe
     apath = ""
-    if is_executable_file(path):
+    if tools.is_executable_file(path):
         sc_type = "app"
-        ipath = extract_icon_from_exe(path,name,data_dir)
+        ipath = tools.extract_icon_from_exe(path,name,data_dir)
     else:
         sc_type = "file"
         apath = fd.askopenfilename(
@@ -287,14 +226,7 @@ def create_new_shortcut():
         if apath == "":
             tkinter.messagebox.showerror("Directory Error", "No app was given.")
             return
-        ipath = extract_icon_from_exe(apath,name,data_dir)
-        
-
-    '''ipath = get_image()
-    if ipath == "":
-        tkinter.messagebox.showerror("Directory Error", "No image was given.")
-        return
-    ipath = image_to_icon(ipath,name)'''
+        ipath = tools.extract_icon_from_exe(apath,name,data_dir)
     
 
     #set id of shortcut based on previous ones
