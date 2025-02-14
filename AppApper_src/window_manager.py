@@ -107,7 +107,7 @@ def create_loaded_shortcuts():
             tkinter.messagebox.showerror("No Good Amount Of Space :<","The program ran out of space, some shortcuts are not shown!")
             break
         sc = tk.Frame(shortcut_container, bg="red",width=100,height=100)
-        sc_button = tk.Button(sc,text = "Launch: " + selected.name,command=lambda p = selected.app_path, t = selected.type, fp = selected.file_path: open_app(p,t,fp))
+        sc_button = tk.Button(sc,text = "Launch: " + selected.name,command=lambda p = selected.app_path, t = selected.type, fp = selected.file_path: open_app(p,t,fp), background="light green")
         sc_color = ""
         sc_image = ""
         icon = ""
@@ -120,7 +120,7 @@ def create_loaded_shortcuts():
             sc_image = tk.Label(sc,image=image_list[index],width=200,height=150)
             sc_image.image = icon
         image_button = tk.Button(sc,text = "Change Image", command=lambda i = index: change_shortcut_image(i))
-        delete_button = tk.Button(sc,text = "X", command=lambda i = index: delete_shortcut(i))
+        delete_button = tk.Button(sc,text = "X", command=lambda i = index: delete_shortcut(i), foreground="red")
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
         sc_button.pack(expand=True,fill="both")
         if selected.icon_path == "null" or not os.path.isfile(selected.icon_path):
