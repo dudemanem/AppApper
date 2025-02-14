@@ -306,7 +306,6 @@ def create_new_shortcut():
 
     sc = shortcut(id,name,sc_type,path,apath,ipath,80,50)
     data_manager.loaded_shortcuts.append(sc)
-
     create_loaded_shortcuts()
     print(data_manager.loaded_shortcuts)
 
@@ -328,6 +327,7 @@ def load_profile_process():
 
 def save_profile_process():
     data_manager.save_profile(profile_name.get("1.0",'1.end'))
+    profile_name.delete('1.0', tk.END)
     create_loaded_shortcuts()
 
 def create_shortcut_process():
