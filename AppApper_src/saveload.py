@@ -89,13 +89,15 @@ def read_profile_data(dir):
                 else:
                     file_path = "null"
                 print(f"app_path is {app_path}, and file_path is {file_path}, and icon path is {icon_path}")
-                if os.path.isfile(app_path) and os.path.isfile(icon_path):
-                    sc = shortcut(id,name,type,app_path,file_path,icon_path,80,50)
-                    loaded_shortcuts.append(sc)
-                elif not os.path.isfile(app_path) or not os.path.isfile(icon_path):
-                    tkinter.messagebox.showerror("Loading Error", "There was an error loading the profile.")
+                if not os.path.isfile(app_path) or (not file_path == "null" and not os.path.isfile(file_path)):
+                    tkinter.messagebox.showerror("Loading Error", "There was an error loading the profile. This could be because the profile's text file was edited or the app and or file has been moved.")
                     loaded_shortcuts = []
-
+                    return
+                if not os.path.isfile(icon_path):
+                    tkinter.messagebox.showerror("Icon Not Found!", f"The icon for shortcut {name} cannot be found. This could be happening because it was moved or deleted, or the profile's text has been modified.")
+                    icon_path = "null"
+                sc = shortcut(id,name,type,app_path,file_path,icon_path,80,50)
+                loaded_shortcuts.append(sc)
     except IndexError:
         tkinter.messagebox.showerror("Index Out Of Range Error", "There was an error reading the profile. It could be because this profile was created before an update, or the profile's text has been modified.")
         return
