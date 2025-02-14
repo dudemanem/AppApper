@@ -89,10 +89,10 @@ def read_profile_data(dir):
                 else:
                     file_path = "null"
                 print(f"app_path is {app_path}, and file_path is {file_path}, and icon path is {icon_path}")
-                if os.path.isfile(icon_path) and os.path.isfile(file_path) and (not icon_path == "null" and os.path.isfile(icon_path)):
+                if os.path.isfile(app_path) and os.path.isfile(icon_path):
                     sc = shortcut(id,name,type,app_path,file_path,icon_path,80,50)
                     loaded_shortcuts.append(sc)
-                else:
+                elif not os.path.isfile(app_path) or not os.path.isfile(icon_path):
                     tkinter.messagebox.showerror("Loading Error", "There was an error loading the profile.")
                     loaded_shortcuts = []
 

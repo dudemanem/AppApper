@@ -165,7 +165,7 @@ def create_loaded_shortcuts():
         sc_color = ""
         sc_image = ""
         icon = ""
-        if selected.icon_path == "null":
+        if selected.icon_path == "null" and os.path.isfile(selected.icon_path):
             sc_color = tk.Frame(sc, bg="red", width=200, height=150)
         else:
             print(selected.icon_path)
