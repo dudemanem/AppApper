@@ -71,10 +71,12 @@ def get_image(name):
         title="Select An Image",
         filetypes=imagetypes
     )
+    if image_path == None:
+        return None
     if tools.is_executable_file(image_path):
         return tools.extract_icon_from_exe(image_path,name,data_dir)
     else:
-        image = tools.image_to_icon(image_path,name + "_image_icon")
+        image = tools.image_to_icon(image_path,name + tools.gen_string())
         return image
 
 ##################################################################################################
@@ -117,7 +119,7 @@ def create_loaded_shortcuts():
             image_list.append(icon)
             sc_image = tk.Label(sc,image=image_list[index],width=200,height=150)
             sc_image.image = icon
-        image_button = tk.Button(sc,text = "Change Image", command=lambda i = index: set_shortcut_image(i))
+        image_button = tk.Button(sc,text = "Change Image", command=lambda i = index: change_shortcut_image(i))
         delete_button = tk.Button(sc,text = "X", command=lambda i = index: delete_shortcut(i))
         sc.grid(row=r,column=c,sticky="nsew", pady=10,padx=10)
         sc_button.pack(expand=True,fill="both")
@@ -137,12 +139,14 @@ def create_loaded_shortcuts():
 ####################################################################################################################################
 #This function sets the ipath of the shortcut in the given index to a resized version of the image at the path given by get_image()#
 ####################################################################################################################################
-def set_shortcut_image(shortcut_index):
+def change_shortcut_image(shortcut_index):
+    old_image = data_manager.loaded_shortcuts[shortcut_index].icon_path
     icon = get_image(data_manager.loaded_shortcuts[shortcut_index].name)
-    
-    data_manager.loaded_shortcuts[shortcut_index].icon_path = icon
-    print(data_manager.loaded_shortcuts[shortcut_index].icon_path)
-    create_loaded_shortcuts()
+    if not icon == None:
+        data_manager.loaded_shortcuts[shortcut_index].icon_path = icon
+        os.remove(old_image)
+        print(data_manager.loaded_shortcuts[shortcut_index].icon_path)
+        create_loaded_shortcuts()
 
 ############################################################################
 #This opens the app or the file and an associated app that are passed to it#

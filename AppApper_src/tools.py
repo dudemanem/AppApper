@@ -2,6 +2,18 @@ from PIL import Image, ImageOps
 import os
 from metadata import *
 import stat
+import random as random
+
+
+#####################################################################################
+#This function generates a random string to be added to the name of a shortcut image#
+#####################################################################################
+def gen_string():
+    s = ""
+    for i in range(5):
+        s = s + icon_name_extenstion_characters[random.randint(0,len(icon_name_extenstion_characters))]
+    return s
+
 
 
 #####################################################################################################
@@ -34,7 +46,7 @@ def extract_icon_from_exe(path,name,icon_out_path):
         bmpstr, 'raw', 'BGRA', 0, 1
     )
 
-    full_outpath = os.path.join(icon_out_path, "{}.png".format(name))
+    full_outpath = os.path.join(icon_out_path, "{}.png".format(name + gen_string()))
     icon.resize((200, 150))
     icon.save(full_outpath, 'PNG')
     return full_outpath
