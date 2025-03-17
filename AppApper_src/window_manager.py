@@ -261,6 +261,8 @@ def configure_grid():
 def load_profile_process():
     data_manager.load_profile()
     create_loaded_shortcuts()
+    profile_name.delete("1.0", "1.end")
+    profile_name.insert("1.end", data_manager.loaded_profile_name)
 
 def save_profile_process():
     data_manager.save_profile(profile_name.get("1.0",'1.end'))
@@ -288,6 +290,8 @@ def innitialize_window():
 
     #load default save data
     data_manager.load_save_data()
+    profile_name.delete("1.0", "1.end")
+    profile_name.insert("1.end", data_manager.loaded_profile_name)
 
     create_loaded_shortcuts()
 

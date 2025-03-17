@@ -31,7 +31,7 @@ def create_data_save_file():
 #This function creates a default profile text file that is loaded on app start. It contains the data of the last saved shortcut.#
 #################################################################################################################################
 def save_last_profile():
-    save_profile("last_profile", data_dir)
+    save_profile("last_profile", data_dir, loaded_profile_name)
 
 #--------------------------------------------------------------------------------------------------------- loading
 
@@ -39,7 +39,7 @@ def save_last_profile():
 #reads selected profile's data#
 ###############################
 def read_profile_data(dir):
-    global loaded_shortcuts
+    global loaded_shortcuts, loaded_profile_name
 
     #if path is empty return error to user
     if dir == "":
@@ -73,6 +73,8 @@ def read_profile_data(dir):
     #loaded name - not currently used for anything
     try:
         profile_name = data[name_index:commas[0]]
+        #sets global name variable
+        loaded_profile_name = profile_name
     except:
         return
     try:
@@ -146,9 +148,12 @@ def compile_profile_data(name):
 ###############################
 #saves data of current profile#
 ###############################
-def save_profile(text_field, path = profile_dir):
+def save_profile(text_field, path = profile_dir, profile_name = ""):
     name = text_field
-    contents = compile_profile_data(name)
+    p_name = profile_name
+    if p_name == "":
+        p_name = name
+    contents = compile_profile_data(p_name)
 
     if not os.path.exists(path):
         tkinter.messagebox.showerror("Missing Profile Directory", "Profile directory at " + path + " is missing. it has now been created!")
