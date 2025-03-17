@@ -285,9 +285,18 @@ def innitialize_window():
     load_profile.grid(row=0,column=3,sticky="ew",pady=2,padx=2)
     shortcut_container.grid(row=1, column=0, sticky="nsew",columnspan=10,pady=0,rowspan=100,)
     shortcut_limit_text.grid(row=1,column=9,sticky="nsew",columnspan=1)
-    create_loaded_shortcuts()
 
     #load default save data
     data_manager.load_save_data()
 
+    create_loaded_shortcuts()
+
     root.mainloop()
+
+############################
+#Function runs on app close#
+############################   
+def window_close():
+    data_manager.save_last_profile()
+    root.destroy()
+root.protocol("WM_DELETE_WINDOW", window_close)

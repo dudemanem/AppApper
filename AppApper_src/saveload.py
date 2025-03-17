@@ -27,6 +27,12 @@ def create_data_save_file():
         f.write("Test")
     tkinter.messagebox.showinfo("Save File Created!", "The save file at " + save_file_path + " has been created")
 
+#################################################################################################################################
+#This function creates a default profile text file that is loaded on app start. It contains the data of the last saved shortcut.#
+#################################################################################################################################
+def save_last_profile():
+    save_profile("last_profile", data_dir)
+
 #--------------------------------------------------------------------------------------------------------- loading
 
 ###############################
@@ -109,6 +115,7 @@ def read_profile_data(dir):
 #opens file prompt and passes profile file data to the read_profile_data() function#
 ####################################################################################
 def load_profile():
+    global loaded_profile_path
 
     filetypes = (
         ('text files', '*.txt'),
@@ -120,6 +127,7 @@ def load_profile():
         initialdir=profile_dir,
         filetypes=filetypes
     )
+    loaded_profile_path = file_path
     read_profile_data(file_path)
 
 #--------------------------------------------------------------------------------------------------------- saving
@@ -138,21 +146,21 @@ def compile_profile_data(name):
 ###############################
 #saves data of current profile#
 ###############################
-def save_profile(text_field):
+def save_profile(text_field, path = profile_dir):
     name = text_field
     contents = compile_profile_data(name)
 
-    if not os.path.exists(profile_dir):
-        tkinter.messagebox.showerror("Missing Profile Directory", "Profile directory at " + profile_dir + " is missing. it has now been created!")
-        os.makedirs(profile_dir)
+    if not os.path.exists(path):
+        tkinter.messagebox.showerror("Missing Profile Directory", "Profile directory at " + path + " is missing. it has now been created!")
+        os.makedirs(path)
 
     if name == "":
         tkinter.messagebox.showerror("No Profile Name Provided", "Enter a name for the profile in the text box before you save it!")
         return
     
-    with open(profile_dir + "\\" + name + ".txt", "w") as f:
+    with open(path + "\\" + name + ".txt", "w") as f:
         f.write(contents)
-    tkinter.messagebox.showinfo("Profile Saved", 'Profile "' + name + '" has been saved!')
+    #tkinter.messagebox.showinfo("Profile Saved", 'Profile "' + name + '" has been saved!')
 
 #--------------------------------------------------------------------------------------------------------- loading default save files and confirming that needed directories exist
 
@@ -169,6 +177,8 @@ def load_save_data():
     if not os.path.exists(save_file_path):
         tkinter.messagebox.showerror("Directory Error", "There is no save file at " + save_file_path + ". It will be created")
         create_data_save_file()
+    
+    read_profile_data(data_dir + "\\last_profile.txt")
 
 
 #key for opening files in python
