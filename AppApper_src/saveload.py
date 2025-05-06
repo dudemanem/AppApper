@@ -32,7 +32,8 @@ def create_data_save_file():
 #################################################################################################################################
 def save_last_profile():
     save_profile("last_profile", data_dir, loaded_profile_name)
-
+    with open(save_file_path, "w") as f:
+        f.write(loaded_profile_name)
 #--------------------------------------------------------------------------------------------------------- loading
 
 ###############################
@@ -165,6 +166,8 @@ def save_profile(text_field, path = profile_dir, profile_name = ""):
     
     with open(path + "\\" + name + ".txt", "w") as f:
         f.write(contents)
+    
+    read_profile_data(path + "\\" + name + ".txt")
     #tkinter.messagebox.showinfo("Profile Saved", 'Profile "' + name + '" has been saved!')
 
 #--------------------------------------------------------------------------------------------------------- loading default save files and confirming that needed directories exist
@@ -183,7 +186,12 @@ def load_save_data():
         tkinter.messagebox.showerror("Directory Error", "There is no save file at " + save_file_path + ". It will be created")
         create_data_save_file()
     
+    #get name of last profile from save data file
+    last_profile_name = ""
+    with open(save_file_path, "r") as f:
+        last_profile_name = f.read()
     read_profile_data(data_dir + "\\last_profile.txt")
+    loaded_profile_name = last_profile_name
 
 
 #key for opening files in python
